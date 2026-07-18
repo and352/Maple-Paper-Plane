@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>枫树纸飞机 - 重塑折叠的艺术</title>
     <style>
-        /* --- 基础重置 --- */
+        /* --- 基础重置与全局样式 --- */
         * { box-sizing: border-box; }
         body {
             margin: 0; padding: 0;
@@ -26,188 +26,241 @@
             width: 100%;
             max-width: 800px;
             padding: 40px 20px;
-            z-index: 10;
             position: relative;
+            z-index: 10;
         }
 
-        h1.glitch {
+        /* --- 标题特效 --- */
+        h1.glitch-title {
             font-size: 3rem;
             text-align: center;
-            color: #ff3333;
-            text-shadow: 2px 2px 0px #00ff00;
             margin-bottom: 10px;
-            letter-spacing: 2px;
+            position: relative;
+            color: #fff;
+            text-shadow: 2px 2px #ff00c1, -2px -2px #00fff9;
+            letter-spacing: 4px;
         }
-
-        h2.subtitle {
+        
+        .subtitle {
             text-align: center;
-            color: #00ff00;
+            color: #00ff41;
             font-size: 1.2rem;
             margin-bottom: 40px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
         }
 
-        p.intro {
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            text-align: justify;
-        }
-
-        strong { color: #fff; font-weight: bold; }
-
-        /* --- 卡片样式 --- */
-        .section-title {
-            color: #ff9900;
-            font-size: 1.5rem;
-            margin-top: 40px;
-            margin-bottom: 20px;
-            border-left: 4px solid #ff9900;
-            padding-left: 15px;
-        }
-
-        .card {
+        /* --- 内容卡片 --- */
+        .section-card {
             background: rgba(20, 20, 20, 0.9);
-            border: 1px solid #333;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 4px;
+            border-left: 4px solid #00ff41;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
             transition: transform 0.2s;
         }
-        .card:hover {
-            border-color: #ff3333;
+        
+        .section-card:hover {
             transform: translateX(5px);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
         }
 
-        /* --- 交互提示 --- */
-        .hint {
+        h2 {
+            color: #ff79c6;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        p { margin-bottom: 15px; font-size: 1.05rem; }
+        
+        strong { color: #fff; font-weight: bold; }
+
+        /* --- 痛点列表 --- */
+        .pain-point {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 4px;
+            border: 1px solid #333;
+        }
+
+        /* --- 进化路线图 --- */
+        .roadmap-item {
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 20px;
+            border-left: 2px dashed #444;
+        }
+        .roadmap-item:last-child { border-left: none; }
+        .phase-tag {
+            color: #00fff9;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* --- 按钮 --- */
+        .cta-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: transparent;
+            border: 2px solid #ff00c1;
+            color: #ff00c1;
+            font-family: inherit;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 40px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+        .cta-btn:hover {
+            background: #ff00c1;
+            color: #000;
+            box-shadow: 0 0 20px #ff00c1;
+        }
+
+        /* --- 核心特效：星星容器 --- */
+        .star-container {
             position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #666;
-            font-size: 0.8rem;
-            pointer-events: none;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.3; }
-            50% { opacity: 1; }
-            100% { opacity: 0.3; }
-        }
-
-        /* --- 核心特效：枫叶粒子 --- */
-        .leaf-particle {
-            position: absolute;
-            pointer-events: none; /* 不阻挡点击 */
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; /* 确保不挡住点击事件 */
             z-index: 9999;
-            animation: leaf-fall 1.5s linear forwards;
         }
 
-        @keyframes leaf-fall {
-            0% {
-                transform: translate(-50%, -50%) scale(0.5) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--tx), var(--ty)) scale(1.2) rotate(var(--rot));
-                opacity: 0;
-            }
+        /* 单个星星的基础样式 */
+        .star-shape {
+            position: absolute;
+            background: #fff;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            opacity: 0;
+            animation: explode 0.8s ease-out forwards;
+        }
+
+        /* 大星星特有样式 */
+        .star-big {
+            width: 30px;
+            height: 30px;
+            background: #ffd700; /* 金色 */
+            box-shadow: 0 0 10px #ffd700;
+            z-index: 10001;
+        }
+
+        /* 小星星特有样式 */
+        .star-small {
+            width: 12px;
+            height: 12px;
+            background: #00fff9; /* 青色 */
+            z-index: 10000;
+        }
+
+        @keyframes explode {
+            0% { transform: scale(0) rotate(0deg); opacity: 1; }
+            50% { opacity: 1; }
+            100% { transform: scale(1.5) rotate(180deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- 标题区 -->
-    <h1 class="glitch">枫树纸飞机</h1>
-    <h2 class="subtitle">【重塑折叠的艺术】</h2>
+    <!-- 特效层 -->
+    <div class="star-container" id="starContainer"></div>
 
-    <!-- 愿景宣言 -->
-    <p class="intro">
-        我们不只是社区，更是纸飞机爱好者的<strong>数字基地</strong>。<br>
-        在这里，我们将硬核竞技、系统化知识图谱与深度社交网络完美融合，让每一次投掷都拥有回响。
-    </p>
+    <div class="container">
+        <h1 class="glitch-title">枫树纸飞机</h1>
+        <div class="subtitle">【重塑折叠的艺术】</div>
 
-    <!-- 痛点直击 -->
-    <div class="section-title">⚡ 击碎行业壁垒</div>
-    
-    <div class="card">
-        <strong>⚖️ 竞技失衡：</strong><br>
-        拒绝“特种纸”碾压“普通纸”。我们要建立分级赛事体系，让技术回归本质，新手亦有出头之日。
-    </div>
+        <div class="section-card">
+            <p><strong>我们不只是社区，更是纸飞机爱好者的数字基地。</strong></p>
+            <p>在这里，我们将硬核竞技、系统化知识图谱与深度社交网络完美融合，让每一次投掷都拥有回响。</p>
+        </div>
 
-    <div class="card">
-        <strong>🤝 社交孤岛：</strong><br>
-        打破单打独斗的沉默。通过战队系统与归属认证，连接每一位孤独的飞手。
-    </div>
-
-    <div class="card">
-        <strong>📚 知识断层：</strong><br>
-        终结教程散落的混乱。打造实测验证机制与结构化Wiki，让经验成为可传承的数据。
-    </div>
-
-    <!-- 进化蓝图 -->
-    <div class="section-title">🚀 三阶进化论</div>
-    <div class="card">
-        <strong>Phase 1 · 基石构建：</strong>上线用户中枢与机型图鉴，确立标准组/无限制组双轨赛制。
-    </div>
-    <div class="card">
-        <strong>Phase 2 · 生态繁荣：</strong>解锁战队荣耀系统与成就勋章，搭建结构化教程Wiki。
-    </div>
-    <div class="card">
-        <strong>Phase 3 · 全球链接：</strong>实现多语言无缝切换，开启全球排行榜。
-    </div>
-</div>
-
-<!-- 底部提示 -->
-<div class="hint">点击屏幕任意位置召唤枫叶</div>
-
-<script>
-    // --- 核心逻辑：只保留这一个脚本，确保绝对执行 ---
-    document.addEventListener('click', function(e) {
-        createLeafExplosion(e.clientX, e.clientY);
-    });
-
-    function createLeafExplosion(x, y) {
-        const count = 12; // 每次点击生成的枫叶数量
-        
-        for (let i = 0; i < count; i++) {
-            const leaf = document.createElement('div');
-            leaf.classList.add('leaf-particle');
+        <div class="section-card">
+            <h2>⚡ 击碎行业壁垒</h2>
+            <p>告别短视频时代的浮躁与碎片化，我们直面三大核心痛点，重建秩序：</p>
             
-            // SVG 枫叶图标 (红色填充，带黑色描边，清晰锐利)
-            leaf.innerHTML = `
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="#ff3333" stroke="#000" stroke-width="1">
-                    <path d="M12 2L14.5 7H20L16 11L18 17L12 14L6 17L8 11L4 7H9.5L12 2Z"/>
-                </svg>
-            `;
+            <div class="pain-point">
+                ⚖️ <strong>竞技失衡：</strong>拒绝“特种纸”碾压“普通纸”。我们要建立分级赛事体系，让技术回归本质，新手亦有出头之日。
+            </div>
+            <div class="pain-point">
+                🤝 <strong>社交孤岛：</strong>打破单打独斗的沉默。通过战队系统与归属认证，连接每一位孤独的飞手。
+            </div>
+            <div class="pain-point">
+                📚 <strong>知识断层：</strong>终结教程散落的混乱。打造实测验证机制与结构化Wiki，让经验成为可传承的数据。
+            </div>
+        </div>
 
-            // 设置初始位置
-            leaf.style.left = x + 'px';
-            leaf.style.top = y + 'px';
+        <div class="section-card">
+            <h2>🚀 三阶进化论</h2>
+            <div class="roadmap-item">
+                <span class="phase-tag">Phase 1 · 基石构建</span>
+                上线用户中枢与机型图鉴，确立标准组/无限制组双轨赛制，奠定公平竞技底座。
+            </div>
+            <div class="roadmap-item">
+                <span class="phase-tag">Phase 2 · 生态繁荣</span>
+                解锁战队荣耀系统与成就勋章，搭建结构化教程Wiki，激活社区内生动力。
+            </div>
+            <div class="roadmap-item">
+                <span class="phase-tag">Phase 3 · 全球链接</span>
+                实现多语言无缝切换，开启全球排行榜，让中国折法与世界对话。
+            </div>
+        </div>
 
-            // 计算随机散落方向 (CSS变量)
-            const angle = Math.random() * Math.PI * 2;
-            const velocity = 50 + Math.random() * 100; // 扩散距离
-            const tx = Math.cos(angle) * velocity + 'px';
-            const ty = Math.sin(angle) * velocity + 'px';
-            const rot = (Math.random() * 360) + 'deg';
+        <a href="#" class="cta-btn">加入开发者计划 >></a>
+    </div>
 
-            leaf.style.setProperty('--tx', tx);
-            leaf.style.setProperty('--ty', ty);
-            leaf.style.setProperty('--rot', rot);
+    <script>
+        // 核心交互逻辑：点击生成“一大四小”星星
+        document.addEventListener('click', function(e) {
+            createStarExplosion(e.clientX, e.clientY);
+        });
 
-            document.body.appendChild(leaf);
+        function createStarExplosion(x, y) {
+            const container = document.getElementById('starContainer');
+            
+            // 1. 创建中间的大星星
+            const bigStar = document.createElement('div');
+            bigStar.className = 'star-shape star-big';
+            bigStar.style.left = (x - 15) + 'px'; // 居中定位
+            bigStar.style.top = (y - 15) + 'px';
+            container.appendChild(bigStar);
 
-            // 动画结束后移除元素，防止内存泄漏
+            // 2. 创建周围的四个小星星
+            // 定义四个方向：上、下、左、右 (也可以改成斜向)
+            const directions = [
+                { dx: 0, dy: -40 },   // 上
+                { dx: 0, dy: 40 },    // 下
+                { dx: -40, dy: 0 },   // 左
+                { dx: 40, dy: 0 }     // 右
+            ];
+
+            directions.forEach(dir => {
+                const smallStar = document.createElement('div');
+                smallStar.className = 'star-shape star-small';
+                // 计算小星星的位置
+                smallStar.style.left = (x + dir.dx - 6) + 'px'; 
+                smallStar.style.top = (y + dir.dy - 6) + 'px';
+                
+                // 给每个小星星加一点随机旋转，看起来更自然
+                const randomRotate = Math.random() * 360;
+                smallStar.style.transform = `rotate(${randomRotate}deg)`;
+                
+                container.appendChild(smallStar);
+            });
+
+            // 3. 动画结束后清理DOM，防止页面卡顿
             setTimeout(() => {
-                leaf.remove();
-            }, 1500);
+                bigStar.remove();
+                const smallStars = container.querySelectorAll('.star-small');
+                smallStars.forEach(s => s.remove());
+            }, 800); // 对应CSS动画时长
         }
-    }
-</script>
-
+    </script>
 </body>
 </html>
