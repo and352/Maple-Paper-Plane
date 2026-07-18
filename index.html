@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>枫树纸飞机 - 赛博朋克社区</title>
+    <title>枫树纸飞机 - 重塑折叠的艺术</title>
     <style>
         /* 1. 全局设置 */
         body {
@@ -22,55 +22,60 @@
             
             /* 赛博朋克动态外边框 */
             border: 4px solid transparent;
-            box-sizing: border-box;
-            animation: cyber-border 3s linear infinite;
+            border-image: linear-gradient(45deg, #ff00cc, #3333ff, #00ffcc) 1;
+            animation: borderFlow 5s linear infinite;
         }
 
-        @keyframes cyber-border {
-            0% { border-color: #ff0055; box-shadow: 0 0 10px #ff0055; }
-            33% { border-color: #00ffff; box-shadow: 0 0 10px #00ffff; }
-            66% { border-color: #ffe600; box-shadow: 0 0 10px #ffe600; }
-            100% { border-color: #ff0055; box-shadow: 0 0 10px #ff0055; }
+        @keyframes borderFlow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
         }
 
-        /* 2. 内容容器 */
+        /* 2. 容器与背景 */
         .container {
-            max-width: 800px;
             width: 90%;
-            padding: 40px 20px;
-            z-index: 10;
+            max-width: 800px;
+            background: rgba(20, 20, 20, 0.95);
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
             position: relative;
-            background: rgba(0, 0, 0, 0.7);
+            z-index: 10;
             backdrop-filter: blur(5px);
             border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+            margin: 20px 0;
         }
 
+        /* 3. 标题特效 */
         h1 {
-            font-size: 3rem;
             text-align: center;
-            margin-bottom: 20px;
-            background: linear-gradient(90deg, #ff0055, #ffe600, #00ffff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #fff;
             text-transform: uppercase;
             letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            text-shadow: 2px 2px 0px #ff00cc, -2px -2px 0px #00ffcc;
+            animation: glitch 1s infinite alternate;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 2px 2px 0px #ff00cc, -2px -2px 0px #00ffcc; transform: skew(0deg); }
+            20% { text-shadow: -2px 2px 0px #ff00cc, 2px -2px 0px #00ffcc; transform: skew(-2deg); }
+            40% { text-shadow: 2px -2px 0px #ff00cc, -2px 2px 0px #00ffcc; transform: skew(2deg); }
+            100% { text-shadow: 2px 2px 0px #ff00cc, -2px -2px 0px #00ffcc; transform: skew(0deg); }
         }
 
         h2 {
-            color: #00ffff;
-            border-left: 4px solid #00ffff;
-            padding-left: 10px;
-            margin-top: 30px;
+            color: #00ffcc;
+            border-left: 4px solid #ff00cc;
+            padding-left: 15px;
+            margin-top: 40px;
             font-size: 1.5rem;
         }
 
         p {
-            font-size: 1.1rem;
             margin-bottom: 15px;
-            color: #cccccc;
+            font-size: 1.1rem;
+            color: #ccc;
         }
 
         strong {
@@ -78,257 +83,225 @@
             font-weight: bold;
         }
 
-        ul {
+        /* 4. 痛点卡片样式 */
+        .pain-point-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        .pain-point-card:hover {
+            background: rgba(0, 255, 204, 0.1);
+            transform: translateX(10px);
+            border-color: #00ffcc;
+        }
+        .icon { margin-right: 10px; font-style: normal; }
+
+        /* 5. 阶段列表样式 */
+        ul.phase-list {
             list-style: none;
             padding: 0;
         }
-
-        li {
-            margin-bottom: 10px;
-            padding-left: 20px;
+        ul.phase-list li {
             position: relative;
+            padding-left: 30px;
+            margin-bottom: 20px;
         }
-
-        li::before {
-            content: ">>";
-            color: #ff0055;
+        ul.phase-list li::before {
+            content: "➤";
             position: absolute;
             left: 0;
-            font-weight: bold;
+            color: #ff00cc;
         }
 
-        /* 3. 画布层 (用于绘制枫叶) */
-        #canvas-layer {
+        /* 6. 底部号召 */
+        .cta {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px dashed #555;
+            font-style: italic;
+            color: #888;
+        }
+
+        /* 7. SVG 枫叶特效层 */
+        #maple-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: auto; /* 允许点击 */
-            z-index: 5;
+            pointer-events: none; /* 让鼠标穿透图层点击网页内容 */
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .maple-leaf {
+            position: absolute;
+            fill: #ff4d4d; /* 枫叶红 */
+            opacity: 0.8;
+            cursor: pointer;
+            pointer-events: auto; /* 恢复叶子的点击事件 */
+            transition: transform 0.2s;
+        }
+        .maple-leaf:hover {
+            fill: #ffcc00; /* 悬停变金黄 */
+            transform: scale(1.2);
+        }
+
+        /* 粒子爆炸效果 */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ffcc00;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .container { padding: 20px; width: 95%; }
         }
     </style>
 </head>
 <body>
 
     <!-- 背景特效层 -->
-    <canvas id="canvas-layer"></canvas>
+    <div id="maple-container"></div>
 
-    <!-- 内容区域 -->
+    <!-- 内容主体 -->
     <div class="container">
         <h1>枫树纸飞机</h1>
-        <p style="text-align: center; color: #ffe600; font-weight: bold;">
-            致力于构建一个集公平竞技、系统教程与深度社交于一体的纸飞机爱好者社区平台。
-        </p>
-        
-        <p>当前短视频平台上的纸飞机圈子虽流量巨大，但普遍存在重娱乐轻沉淀的问题。为此，本平台旨在解决三大痛点：</p>
+        <p style="text-align: center; color: #ff00cc; font-weight: bold;">【重塑折叠的艺术】</p>
 
-        <h2>| 核心痛点</h2>
-        <ul>
-            <li><strong>缺乏公平性：</strong>普通纸与特种纸同台竞技，新手难以立足。</li>
-            <li><strong>社交孤岛：</strong>玩家缺乏战队体系与归属感，多为单打独斗。</li>
-            <li><strong>知识碎片化：</strong>优质教程散落各处，缺乏系统的实测验证机制。</li>
+        <p>我们不只是社区，更是纸飞机爱好者的<strong>数字基地</strong>。<br>
+        在这里，我们将<strong>硬核竞技</strong>、<strong>系统化知识图谱</strong>与<strong>深度社交网络</strong>完美融合，让每一次投掷都拥有回响。</p>
+
+        <h2>⚡ 击碎行业壁垒</h2>
+        <p>告别短视频时代的浮躁与碎片化，我们直面三大核心痛点，重建秩序：</p>
+        
+        <div class="pain-point-card">
+            <i class="icon">⚖️</i><strong>竞技失衡</strong>：拒绝“特种纸”碾压“普通纸”。我们要建立分级赛事体系，让技术回归本质，新手亦有出头之日。
+        </div>
+        <div class="pain-point-card">
+            <i class="icon">🤝</i><strong>社交孤岛</strong>：打破单打独斗的沉默。通过战队系统与归属认证，连接每一位孤独的飞手。
+        </div>
+        <div class="pain-point-card">
+            <i class="icon">📚</i><strong>知识断层</strong>：终结教程散落的混乱。打造实测验证机制与结构化Wiki，让经验成为可传承的数据。
+        </div>
+
+        <h2>🚀 三阶进化论</h2>
+        <p>我们的征途是星辰大海，也是全球飞手的指尖：</p>
+        <ul class="phase-list">
+            <li><strong>Phase 1 · 基石构建</strong>：上线用户中枢与机型图鉴，确立标准组/无限制组双轨赛制，奠定公平竞技底座。</li>
+            <li><strong>Phase 2 · 生态繁荣</strong>：解锁战队荣耀系统与成就勋章，搭建结构化教程Wiki，激活社区内生动力。</li>
+            <li><strong>Phase 3 · 全球链接</strong>：实现多语言无缝切换，开启全球排行榜，让中国折法与世界对话。</li>
         </ul>
 
-        <h2>| 我们的愿景</h2>
-        <p>我们要打造的不仅仅是一个论坛，而是一个<strong>数字化纸飞机生态实验室</strong>。</p>
-        <p>在这里，每一次折叠都有数据支撑，每一次投掷都有公平见证。</p>
+        <div class="cta">
+            “如果你认同这一理念，欢迎参与开发，让我们携手，在赛博空间折叠未来。”
+        </div>
     </div>
 
-    <!-- 核心脚本：枫叶生成与交互 -->
     <script>
-        const canvas = document.getElementById('canvas-layer');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let leaves = [];
-        let particles = []; // 爆炸粒子
+        // SVG 枫叶路径数据
+        const maplePath = "M10,0 L12,8 L20,8 L14,12 L16,20 L10,15 L4,20 L6,12 L0,8 L8,8 Z"; 
 
-        // 调整画布大小
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        // 枫叶类
-        class Leaf {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height - height;
-                this.size = Math.random() * 15 + 10; // 枫叶大小
-                this.speedY = Math.random() * 1 + 0.5;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.rotation = Math.random() * 360;
-                this.rotationSpeed = Math.random() * 2 - 1;
-                this.color = `rgba(255, ${Math.floor(Math.random() * 100 + 100)}, 0, 0.8)`; // 橙红色系
-                this.isDead = false;
-                
-                // 赛博朋克描边状态
-                this.isHovered = false;
-            }
-
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.rotation * Math.PI / 180);
-                
-                // 如果被激活（鼠标悬停或点击前摇），添加发光描边
-                if (this.isHovered) {
-                    ctx.shadowBlur = 15;
-                    ctx.shadowColor = '#00ffff';
-                    ctx.strokeStyle = '#00ffff';
-                    ctx.lineWidth = 2;
-                } else {
-                    ctx.shadowBlur = 0;
-                }
-
-                // 绘制枫叶路径 (简化版五角枫叶)
-                ctx.beginPath();
-                ctx.moveTo(0, -this.size);
-                ctx.lineTo(this.size * 0.2, -this.size * 0.2);
-                ctx.lineTo(this.size, -this.size * 0.3);
-                ctx.lineTo(this.size * 0.4, this.size * 0.2);
-                ctx.lineTo(this.size * 0.6, this.size);
-                ctx.lineTo(0, this.size * 0.5);
-                ctx.lineTo(-this.size * 0.6, this.size);
-                ctx.lineTo(-this.size * 0.4, this.size * 0.2);
-                ctx.lineTo(-this.size, -this.size * 0.3);
-                ctx.lineTo(-this.size * 0.2, -this.size * 0.2);
-                ctx.closePath();
-
-                ctx.fillStyle = this.color;
-                ctx.fill();
-                
-                if (this.isHovered) {
-                    ctx.stroke(); // 绘制发光边框
-                }
-
-                ctx.restore();
-            }
-
-            update() {
-                this.y += this.speedY;
-                this.x += this.speedX + Math.sin(this.y * 0.01) * 0.5; // 飘落摆动
-                this.rotation += this.rotationSpeed;
-
-                // 边界检查
-                if (this.y > height + 50) {
-                    this.y = -50;
-                    this.x = Math.random() * width;
-                    this.isDead = false;
-                }
-            }
-        }
-
-        // 爆炸粒子类
-        class Particle {
-            constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.size = Math.random() * 3 + 1;
-                this.speedX = Math.random() * 6 - 3;
-                this.speedY = Math.random() * 6 - 3;
-                this.color = color;
-                this.life = 1; // 生命值 1.0 -> 0
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.life -= 0.02; // 慢慢消失
-            }
-            draw() {
-                ctx.globalAlpha = this.life;
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.globalAlpha = 1;
-            }
-        }
-
-        // 初始化枫叶
-        for (let i = 0; i < 20; i++) {
-            leaves.push(new Leaf());
-        }
-
-        // 动画循环
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-
-            // 更新和绘制枫叶
-            leaves.forEach(leaf => {
-                leaf.update();
-                leaf.draw();
-            });
-
-            // 更新和绘制爆炸粒子
-            for (let i = particles.length - 1; i >= 0; i--) {
-                particles[i].update();
-                particles[i].draw();
-                if (particles[i].life <= 0) {
-                    particles.splice(i, 1);
-                }
-            }
-
-            requestAnimationFrame(animate);
-        }
-        animate();
-
-        // 交互逻辑：点击检测
-        canvas.addEventListener('click', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            const clickY = e.clientY - rect.top;
-
-            // 倒序遍历，优先点击最上层的叶子
-            for (let i = leaves.length - 1; i >= 0; i--) {
-                const leaf = leaves[i];
-                // 简单的距离检测 (判定半径为 size * 1.5)
-                const dist = Math.hypot(clickX - leaf.x, clickY - leaf.y);
-                
-                if (dist < leaf.size * 1.5) {
-                    // 触发爆炸！
-                    createExplosion(leaf.x, leaf.y, leaf.color);
-                    
-                    // 移除这片叶子，并在顶部生成新的
-                    leaves.splice(i, 1);
-                    setTimeout(() => {
-                        leaves.push(new Leaf());
-                    }, 1000); // 1秒后重生
-                    
-                    break; // 一次只点一片
-                }
-            }
-        });
-
-        // 创建爆炸效果
-        function createExplosion(x, y, color) {
-            for (let i = 0; i < 20; i++) {
-                particles.push(new Particle(x, y, color));
-                // 增加一些白色的火花
-                if (i % 3 === 0) {
-                    particles.push(new Particle(x, y, '#ffffff')); 
-                }
-            }
-        }
-        
-        // 鼠标移动时的悬停高亮效果
-        canvas.addEventListener('mousemove', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
+        function createLeaf() {
+            const container = document.getElementById('maple-container');
+            const leaf = document.createElementNS("http://www.w3.org/2000/svg", "svg");
             
-            leaves.forEach(leaf => {
-                const dist = Math.hypot(mouseX - leaf.x, mouseY - leaf.y);
-                if (dist < leaf.size * 1.5) {
-                    leaf.isHovered = true;
-                    document.body.style.cursor = 'pointer';
-                } else {
-                    leaf.isHovered = false;
-                }
+            // 设置 SVG 属性
+            leaf.setAttribute("viewBox", "0 0 20 20");
+            leaf.setAttribute("class", "maple-leaf");
+            
+            // 随机大小和位置
+            const size = Math.random() * 30 + 20; // 20px - 50px
+            const startX = Math.random() * window.innerWidth;
+            
+            leaf.style.width = `${size}px`;
+            leaf.style.height = `${size}px`;
+            leaf.style.left = `${startX}px`;
+            leaf.style.top = `-50px`;
+            
+            // 绘制枫叶形状
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", maplePath);
+            leaf.appendChild(path);
+
+            // 动画逻辑
+            let posY = -50;
+            let posX = startX;
+            let speed = Math.random() * 2 + 1;
+            let angle = Math.random() * 360;
+            let wobble = Math.random() * 0.05;
+            
+            // 点击爆炸事件
+            leaf.addEventListener('click', function(e) {
+                e.stopPropagation(); // 防止冒泡
+                explode(e.clientX, e.clientY);
+                this.remove(); // 点击后消失
             });
-        });
+
+            container.appendChild(leaf);
+
+            // 下落循环
+            function fall() {
+                if (!document.body.contains(leaf)) return;
+
+                posY += speed;
+                angle += 2;
+                posX += Math.sin(posY * wobble) * 2;
+
+                leaf.style.transform = `translate(${posX - startX}px, ${posY}px) rotate(${angle}deg)`;
+                leaf.style.top = `-50px`; // 保持基准
+
+                if (posY > window.innerHeight) {
+                    leaf.remove();
+                } else {
+                    requestAnimationFrame(fall);
+                }
+            }
+            requestAnimationFrame(fall);
+        }
+
+        // 粒子爆炸特效函数
+        function explode(x, y) {
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                document.body.appendChild(particle);
+                
+                // 初始位置
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                
+                // 随机颜色（黄/红）
+                particle.style.background = Math.random() > 0.5 ? '#ffcc00' : '#ff4d4d';
+
+                // 随机运动方向
+                const destX = (Math.random() - 0.5) * 200;
+                const destY = (Math.random() - 0.5) * 200;
+
+                // 动画
+                const animation = particle.animate([
+                    { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+                    { transform: `translate(${destX}px, ${destY}px) scale(0)`, opacity: 0 }
+                ], {
+                    duration: 800,
+                    easing: 'cubic-bezier(0, .9, .57, 1)'
+                });
+
+                animation.onfinish = () => particle.remove();
+            }
+        }
+
+        // 启动生成器
+        setInterval(createLeaf, 400); // 每400毫秒生成一片
     </script>
 </body>
 </html>
