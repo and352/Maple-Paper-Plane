@@ -155,7 +155,7 @@
         <div style="font-size:14px;margin-top:5px;">飞行里程破百</div>
     </div>
 
-<script>
+<!-- 第二段JS代码请接在下方 --><script>
 const D={
 zh:{t:"枫树纸飞机",c:`【愿景】\n筑一方净土，聚四海同好。\n融公平竞技、系统教程与深度社交于一体，\n只为纸飞机爱好者，寻一处归心之所。\n\n【破局】\n叹当今短视频江湖，虽喧嚣繁华，却重浮华而轻沉淀。\n吾辈立志，破除三座大山：\n一曰不公：凡纸与特种纸混战，致使新锐难立；\n二曰孤岛：少战队归属，致使高手孤身奋战；\n三曰碎片：良法散落，缺系统实测之明鉴。\n\n【规划】\n建内外双通之台，令天下飞手皆有所归。\n初阶筑基：立用户图鉴，定分级赛制；\n次阶聚势：建战队勋章，成结构化百科；\n终阶出海：启多语切换，登全球排行榜。\n\n若同此念，诚邀入局，共襄盛举。`,jb:"加入我们",ft:"求签",gbt:"📜 云端投递",gbn:"此间暂不开放，敬请期待...",mt:"江湖传书",mtxt:"群聊暂未开启，请稍候片刻。\n飞鸽传书正在路上...",msLabel:"毫秒级计时",mb:"朋友圈",momTitle:"朋友圈",searchPh:"搜名字加好友...",searchBtn:"搜索",postPh:"分享你的飞行心得...",postBtn:"发布",pf:"个人主页",profTitle:"个人主页",friendTitle:"江湖好友"},
 en:{t:"Maple Paper Plane",c:`[Vision]\nBuilding a sanctuary for enthusiasts worldwide.\nIntegrating fair competition, systematic tutorials, and deep social interaction.\n\n[The Problem]\nShort-video platforms are bustling but prioritize fleeting entertainment over substance. We solve three issues:\n1. Unfairness: Standard and specialty papers compete together.\n2. Isolation: Players lack team systems and belonging.\n3. Fragmentation: Tutorials are scattered without verification.\n\n[Roadmap]\nPhase 1: User database, model gallery, tiered tournaments.\nPhase 2: Clan system, achievement badges, structured Wiki.\nPhase 3: Multi-language support, global leaderboards.\n\nJoin us if you share this vision.`,jb:"Join Us",ft:"Fortune",gbt:"📜 Cloud Guestbook",gbn:"Currently closed. Stay tuned...",mt:"Message from Jianghu",mtxt:"The group chat is not open yet, please wait.\nThe carrier pigeon is on its way...",msLabel:"Millisecond Timer",mb:"Moments",momTitle:"Moments",searchPh:"Search name to add friend...",searchBtn:"Search",postPh:"Share your flight experience...",postBtn:"Post",pf:"Profile",profTitle:"Profile",friendTitle:"Friends"}
@@ -222,4 +222,9 @@ function addMileage(n){
         badgeShown = true;
         localStorage.setItem('maple_badge_shown', 'true');
         document.getElementById('badge').classList.add('show');
-        setTimeout(()=>document.getElementById('badge').classList.remove
+        setTimeout(()=>document.getElementById('badge').classList.remove('show'),3000);
+    }
+}
+
+let msInt=null, ms=0, msRunning=false;
+function updateMsDisplay(){
