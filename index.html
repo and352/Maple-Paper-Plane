@@ -5,44 +5,145 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>枫树纸飞机 - 赛博卷轴</title>
     <style>
-        :root { --bg-color: #2a1a14; --paper-color: #f4e4bc; --text-color: #3d2b1f; --accent-color: #8b0000; }
-        body.dark-mode { --bg-color: #0f0805; --paper-color: #2c241b; --text-color: #d4af37; --accent-color: #ff4500; }
+        :root {
+            --bg-color: #2a1a14;
+            --paper-color: #f4e4bc;
+            --text-color: #3d2b1f;
+            --accent-color: #8b0000;
+        }
+        body.dark-mode {
+            --bg-color: #0f0805;
+            --paper-color: #2c241b;
+            --text-color: #d4af37;
+            --accent-color: #ff4500;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; transition: background-color 0.5s, color 0.5s; }
-        body { background-color: var(--bg-color); min-height: 100vh; overflow-x: auto; cursor: crosshair; font-family: 'STKaiti', 'KaiTi', serif; }
+        body {
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            overflow-x: auto; 
+            cursor: crosshair;
+            font-family: 'STKaiti', 'KaiTi', serif;
+        }
 
         .scroll-container { display: flex; min-height: 100vh; padding: 80px 20px 40px; }
-        .wood-rod { width: 30px; background: linear-gradient(90deg, #2a1610 0%, #5d3a28 30%, #8b5a3c 50%, #5d3a28 70%, #2a1610 100%); box-shadow: inset 0 0 10px rgba(0,0,0,0.8); flex-shrink: 0; border-radius: 4px; }
-        .paper-content { flex: 1; background-color: var(--paper-color); padding: 40px; box-shadow: 0 0 30px rgba(0,0,0,0.3); writing-mode: vertical-rl; text-orientation: upright; letter-spacing: 0.2em; line-height: 2.2; overflow-x: auto; display: flex; align-items: flex-start; gap: 30px; }
+        .wood-rod {
+            width: 30px;
+            background: linear-gradient(90deg, #2a1610 0%, #5d3a28 30%, #8b5a3c 50%, #5d3a28 70%, #2a1610 100%);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+            flex-shrink: 0;
+            border-radius: 4px;
+        }
+        .paper-content {
+            flex: 1;
+            background-color: var(--paper-color);
+            padding: 40px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            letter-spacing: 0.2em;
+            line-height: 2.2;
+            overflow-x: auto;
+            display: flex;
+            align-items: flex-start;
+            gap: 30px;
+        }
+
         h1 { font-size: 2.8rem; color: var(--text-color); white-space: nowrap; font-weight: bold;}
         .text-col { font-size: 1.2rem; color: var(--text-color); white-space: pre-wrap; max-height: 80vh; }
 
-        body.en-mode .paper-content { writing-mode: horizontal-tb; flex-direction: column; align-items: flex-start; overflow-x: hidden; overflow-y: auto; gap: 20px; }
+        /* 英文横排模式 */
+        body.en-mode .paper-content {
+            writing-mode: horizontal-tb;
+            flex-direction: column;
+            align-items: flex-start;
+            overflow-x: hidden;
+            overflow-y: auto;
+            gap: 20px;
+        }
         body.en-mode h1 { margin-bottom: 20px; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; }
         body.en-mode .text-col { font-family: 'Georgia', serif; max-height: none; line-height: 1.8; font-size: 1.1rem;}
 
-        .top-bar { position: fixed; top: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; z-index: 100; pointer-events: none; }
-        .tool-btn { pointer-events: auto; background: rgba(0,0,0,0.6); color: #fff; border: 1px solid #d4af37; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 14px; backdrop-filter: blur(5px); }
-        .bottom-left-bar { position: fixed; bottom: 20px; left: 20px; z-index: 100; background: rgba(0,0,0,0.6); color: #d4af37; padding: 8px 15px; border-radius: 20px; border: 1px solid #d4af37; font-weight: bold; font-size: 14px; }
-        .lang-switch { position: fixed; top: 20px; right: 80px; z-index: 100; width: 40px; height: 40px; border-radius: 50%; background: var(--accent-color); color: #fff; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; font-size: 12px; }
+        /* 顶部工具栏 */
+        .top-bar {
+            position: fixed; top: 20px; left: 20px; right: 20px;
+            display: flex; justify-content: space-between; z-index: 100; pointer-events: none;
+        }
+        .tool-btn {
+            pointer-events: auto; background: rgba(0,0,0,0.6); color: #fff;
+            border: 1px solid #d4af37; padding: 8px 15px; border-radius: 20px;
+            cursor: pointer; font-size: 14px; backdrop-filter: blur(5px);
+        }
+        
+        /* 左下角里程 */
+        .bottom-left-bar {
+            position: fixed; bottom: 20px; left: 20px; z-index: 100;
+            background: rgba(0,0,0,0.6); color: #d4af37;
+            padding: 8px 15px; border-radius: 20px; border: 1px solid #d4af37; 
+            font-weight: bold; font-size: 14px;
+        }
 
-        .join-btn, .fortune-btn, .timer-box { writing-mode: horizontal-tb; border: 2px solid var(--text-color); color: var(--text-color); padding: 10px 15px; font-size: 1.1rem; font-weight: bold; cursor: pointer; background: transparent; transition: all 0.3s; white-space: nowrap; align-self: center; }
-        .join-btn { border: 3px double var(--accent-color); color: var(--accent-color); padding: 15px 10px; font-size: 1.2rem; }
-        .timer-box.running { border-color: var(--accent-color); color: var(--accent-color); animation: pulse 1s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        /* 语言切换 */
+        .lang-switch {
+            position: fixed; top: 20px; right: 80px; z-index: 100;
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--accent-color); color: #fff; border: 2px solid #fff;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-weight: bold; font-size: 12px;
+        }
 
-        .guestbook { writing-mode: horizontal-tb; border-left: 2px dashed var(--text-color); padding-left: 20px; margin-left: 20px; min-width: 200px; max-width: 250px; }
+        /* 加入我们 */
+        .join-btn {
+            writing-mode: horizontal-tb;
+            border: 3px double var(--accent-color); color: var(--accent-color);
+            padding: 15px 10px; font-size: 1.2rem; font-weight: bold;
+            cursor: pointer; background: transparent; transition: all 0.3s;
+            white-space: nowrap; align-self: center;
+        }
+        .join-btn:hover { background: var(--accent-color); color: #fff; }
+
+        /* 求签按钮 */
+        .fortune-btn {
+            writing-mode: horizontal-tb;
+            border: 2px solid #d4af37; color: #d4af37;
+            padding: 10px 8px; font-size: 1rem; font-weight: bold;
+            cursor: pointer; background: transparent; transition: all 0.3s;
+            white-space: nowrap; align-self: center;
+        }
+        .fortune-btn:hover { background: #d4af37; color: #000; }
+
+        /* 留言区 */
+        .guestbook {
+            writing-mode: horizontal-tb;
+            border-left: 2px dashed var(--text-color);
+            padding-left: 20px; margin-left: 20px;
+            min-width: 200px; max-width: 250px;
+        }
         body.en-mode .guestbook { border-left: none; border-top: 2px dashed var(--text-color); padding-left: 0; padding-top: 20px; margin-left: 0; max-width: 100%; width: 100%; }
         .gb-title { font-size: 1.2rem; margin-bottom: 10px; font-weight: bold; }
         .gb-notice { font-size: 1rem; color: var(--accent-color); font-style: italic; }
 
+        /* 弹窗 */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: var(--paper-color); padding: 40px; border: 4px double var(--accent-color); text-align: center; max-width: 80%; position: relative; max-height: 80vh; overflow-y: auto;}
         .close-modal { position: absolute; top: 10px; right: 10px; cursor: pointer; font-size: 24px; color: var(--accent-color); }
 
-        .badge-popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); background: radial-gradient(circle, #f4e4bc 30%, #d4af37 100%); padding: 40px; border-radius: 50%; color: #8b0000; text-align: center; box-shadow: 0 0 60px rgba(212, 175, 55, 0.8), inset 0 0 20px rgba(255,255,255,0.5); border: 4px solid #8b0000; z-index: 2000; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        /* 绝美成就徽章 */
+        .badge-popup { 
+            position: fixed; top: 50%; left: 50%; 
+            transform: translate(-50%, -50%) scale(0); 
+            background: radial-gradient(circle, #f4e4bc 30%, #d4af37 100%); 
+            padding: 40px; border-radius: 50%; 
+            color: #8b0000; text-align: center; 
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.8), inset 0 0 20px rgba(255,255,255,0.5); 
+            border: 4px solid #8b0000;
+            z-index: 2000; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
         .badge-popup.show { transform: translate(-50%, -50%) scale(1); }
         .badge-icon { font-size: 50px; margin-bottom: 10px; filter: drop-shadow(0 0 5px rgba(255,215,0,0.8));}
 
+        /* 星星特效 */
         .star { position: fixed; pointer-events: none; z-index: 9999; animation: star-fade 1s forwards; }
         @keyframes star-fade { 0% { transform: scale(0) rotate(0deg); opacity: 1; } 100% { transform: scale(1.5) rotate(180deg); opacity: 0; } }
     </style>
@@ -81,7 +182,6 @@
             
             <div class="join-btn" onclick="openModal()" id="btn-text">加入我们</div>
             <div class="fortune-btn" onclick="drawFortune()" id="fortune-text">求签</div>
-            <div class="timer-box" id="timer-btn" onclick="toggleTimer()">⏱️ 掐表计时</div>
 
             <div class="guestbook">
                 <div class="gb-title" id="gb-title">📜 云端投递</div>
@@ -95,47 +195,44 @@
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal()">&times;</span>
             <h3 style="color:var(--accent-color); margin-bottom:15px;" id="modal-title">江湖传书</h3>
-            <p id="modal-text" style="font-size:18px; line-height:1.8;"></p>
+            <p id="modal-text" style="font-size:18px; line-height:1.8;">群聊暂未开启，请稍候片刻。<br>飞鸽传书正在路上...</p>
         </div>
     </div>
 
     <div class="badge-popup" id="badge">
         <div class="badge-icon">✈️</div>
-        <div style="font-weight:bold; font-size:24px;" id="badge-title">凌云之志</div>
-        <div style="font-size:14px; margin-top:5px;" id="badge-desc">飞行里程破百</div>
+        <div style="font-weight:bold; font-size:24px;">凌云之志</div>
+        <div style="font-size:14px; margin-top:5px;">飞行里程破百</div>
     </div>
 
     <script>
+        // 精准双语数据
         const data = {
             zh: {
                 title: "枫树纸飞机",
                 content: `【愿景】\n筑一方净土，聚四海同好。\n融公平竞技、系统教程与深度社交于一体，\n只为纸飞机爱好者，寻一处归心之所。\n\n【破局】\n叹当今短视频江湖，虽喧嚣繁华，却重浮华而轻沉淀。\n吾辈立志，破除三座大山：\n一曰不公：凡纸与特种纸混战，致使新锐难立；\n二曰孤岛：少战队归属，致使高手孤身奋战；\n三曰碎片：良法散落，缺系统实测之明鉴。\n\n【规划】\n建内外双通之台，令天下飞手皆有所归。\n初阶筑基：立用户图鉴，定分级赛制；\n次阶聚势：建战队勋章，成结构化百科；\n终阶出海：启多语切换，登全球排行榜。\n\n若同此念，诚邀入局，共襄盛举。`,
-                btn: "加入我们", fortune: "求签", timer: "⏱️ 掐表计时", timerRunning: "⏱️ 飞行中...", gbTitle: "📜 云端投递", gbNotice: "此间暂不开放，敬请期待...",
+                btn: "加入我们", fortune: "求签", gbTitle: "📜 云端投递", gbNotice: "此间暂不开放，敬请期待...",
                 modalTitle: "江湖传书", modalText: "群聊暂未开启，请稍候片刻。\n飞鸽传书正在路上..."
             },
             en: {
                 title: "Maple Paper Plane",
                 content: `[Vision]\nBuilding a sanctuary for enthusiasts worldwide.\nIntegrating fair competition, systematic tutorials, and deep social interaction to create a true home for paper plane lovers.\n\n[The Problem]\nWhile short-video platforms are bustling, they often prioritize fleeting entertainment over lasting substance. We are dedicated to solving three core issues:\n1. Unfairness: Mixing standard and specialty papers makes it hard for newcomers to stand out.\n2. Isolation: Without team systems, players are left to fight alone without a sense of belonging.\n3. Fragmentation: High-quality techniques are scattered, lacking systematic verification.\n\n[Roadmap]\nBuilding a globally connected platform for all pilots.\nPhase 1 (Foundation): User database, model gallery, and tiered tournaments.\nPhase 2 (Ecosystem): Clan system, achievement badges, and a structured Wiki.\nPhase 3 (Global): Multi-language support and global leaderboards.\n\nIf you share this vision, we invite you to join us and shape the future together.`,
-                btn: "Join Us", fortune: "Fortune", timer: "⏱️ Airtime", timerRunning: "⏱️ Flying...", gbTitle: "📜 Cloud Guestbook", gbNotice: "Currently closed. Stay tuned...",
+                btn: "Join Us", fortune: "Fortune", gbTitle: "📜 Cloud Guestbook", gbNotice: "Currently closed. Stay tuned...",
                 modalTitle: "Message from Jianghu", modalText: "The group chat is not open yet, please wait.\nThe carrier pigeon is on its way..."
             }
         };
 
-        const poems = ["素纸轻折寄长风，枫林深处觅归鸿。", "指尖翻飞化神翼，不负韶华不负空。", "莫道凡纸无傲骨，借得长风上九霄。", "千回百转匠心在，一掷凌云万里遥。", "聚散随缘皆过客，唯留纸翼记平生。"];
-        const achievements = [
-            { threshold: 100, titleZh: "凌云之志", titleEn: "Soaring Spirit", descZh: "飞行里程破百", descEn: "Mileage reached 100" },
-            { threshold: 1000, titleZh: "御风而行", titleEn: "Wind Rider", descZh: "飞行里程破千", descEn: "Mileage reached 1,000" },
-            { threshold: 10000, titleZh: "万里鹏程", titleEn: "Boundless Journey", descZh: "飞行里程破万", descEn: "Mileage reached 10,000" },
-            { threshold: 1000000, titleZh: "扶摇直上", titleEn: "Skyward Ascension", descZh: "飞行里程破百万", descEn: "Mileage reached 1 Million" },
-            { threshold: 10000000, titleZh: "九霄云外", titleEn: "Beyond the Heavens", descZh: "飞行里程破千万", descEn: "Mileage reached 10 Million" },
-            { threshold: 100000000, titleZh: "寰宇至尊", titleEn: "Supreme Master", descZh: "飞行里程破亿", descEn: "Mileage reached 100 Million" }
+        // 古风诗句库
+        const poems = [
+            "素纸轻折寄长风，枫林深处觅归鸿。",
+            "指尖翻飞化神翼，不负韶华不负空。",
+            "莫道凡纸无傲骨，借得长风上九霄。",
+            "千回百转匠心在，一掷凌云万里遥。",
+            "聚散随缘皆过客，唯留纸翼记平生。"
         ];
 
         let currentLang = 'zh';
         let mileage = parseInt(localStorage.getItem('maple_mileage')) || 0;
-        let unlockedAchievements = JSON.parse(localStorage.getItem('maple_achievements')) || [];
-        let timerInterval = null;
-        let timerStartTime = 0;
         document.getElementById('mileage-count').innerText = mileage;
 
         function toggleLang() {
@@ -146,15 +243,17 @@
             document.getElementById('main-content').innerText = d.content;
             document.getElementById('btn-text').innerText = d.btn;
             document.getElementById('fortune-text').innerText = d.fortune;
-            document.getElementById('timer-btn').innerText = timerInterval ? d.timerRunning : d.timer;
             document.getElementById('gb-title').innerText = d.gbTitle;
             document.getElementById('gb-notice').innerText = d.gbNotice;
+            document.getElementById('modal-title').innerText = d.modalTitle;
+            document.getElementById('modal-text').innerText = d.modalText;
         }
 
         function toggleDarkMode() { document.body.classList.toggle('dark-mode'); }
         function openModal() { document.getElementById('modal').style.display = 'flex'; }
         function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
+        // 求签功能 (20%概率)
         function drawFortune() {
             const rand = Math.random();
             let msg = "";
@@ -173,43 +272,42 @@
             openModal();
         }
 
-        // 滞空计时器逻辑（完美闭环）
-        function toggleTimer() {
-            const btn = document.getElementById('timer-btn');
-            if (!timerInterval) {
-                // 1. 开始计时
-                timerStartTime = Date.now();
-                timerInterval = setInterval(() => {
-                    const elapsed = ((Date.now() - timerStartTime) / 1000).toFixed(1);
-                    btn.innerText = `⏱️ ${elapsed}s`;
-                }, 100);
-                btn.classList.add('running');
-                btn.innerText = data[currentLang].timerRunning;
-            } else {
-                // 2. 停止计时并重置
-                clearInterval(timerInterval);
-                timerInterval = null;
-                btn.classList.remove('running');
-                const finalTime = ((Date.now() - timerStartTime) / 1000).toFixed(2);
-                
-                // 3. 弹窗展示成绩
-                const title = currentLang === 'zh' ? "滞空成绩" : "Airtime Record";
-                const text = currentLang === 'zh' 
-                    ? `本次纸飞机滞空时间：\n【 ${finalTime} 秒 】\n\n计时已重置，随时可再次起飞！` 
-                    : `Your paper plane's airtime:\n【 ${finalTime} seconds 】\n\nTimer has been reset. Ready for the next flight!`;
-                
-                document.getElementById('modal-title').innerText = title;
-                document.getElementById('modal-text').innerText = text;
-                openModal();
-                
-                // 4. 恢复按钮文字
-                btn.innerText = data[currentLang].timer;
-            }
-        }
-
         // 星星与里程
         document.addEventListener('click', function(e) {
-            if (e.target.closest('.join-btn') || e.target.closest('.modal-content') || e.target.closest('.tool-btn') || e
+            if (e.target.closest('.join-btn') || e.target.closest('.modal-content') || e.target.closest('.tool-btn') || e.target.closest('.lang-switch') || e.target.closest('.fortune-btn')) return;
+            
+            mileage++;
+            document.getElementById('mileage-count').innerText = mileage;
+            localStorage.setItem('maple_mileage', mileage);
+            
+            if (mileage === 100) {
+                const badge = document.getElementById('badge');
+                badge.classList.add('show');
+                setTimeout(() => badge.classList.remove('show'), 3000);
+            }
 
----
-代码这次应该完整了，你复制保存后试试，如果还有问题直接截图给我看。
+            createStar(e.clientX, e.clientY, true);
+            for(let i=0; i<4; i++) {
+                setTimeout(() => {
+                    const offsetX = (Math.random() - 0.5) * 80;
+                    const offsetY = (Math.random() - 0.5) * 80;
+                    createStar(e.clientX + offsetX, e.clientY + offsetY, false);
+                }, i * 50);
+            }
+        });
+
+        function createStar(x, y, isBig) {
+            const star = document.createElement('div');
+            star.innerHTML = '★';
+            star.className = 'star';
+            star.style.left = x + 'px';
+            star.style.top = y + 'px';
+            star.style.fontSize = isBig ? '40px' : '20px';
+            star.style.color = '#FFD700';
+            star.style.transform = 'translate(-50%, -50%)';
+            document.body.appendChild(star);
+            setTimeout(() => star.remove(), 1000);
+        }
+    </script>
+</body>
+</html>
