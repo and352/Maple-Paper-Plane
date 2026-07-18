@@ -3,234 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>枫叶纸飞机 - 社区平台</title>
-    <!-- 这一行是修复白屏的关键，告诉浏览器去哪里找样式 -->
+    <title>枫叶纸飞机 - 赛博朋克社区</title>
     <base href="/Maple-Paper-Plane/">
     <style>
-        :root {
-            --primary-color: #e74c3c; /* 枫叶红 */
-            --secondary-color: #2c3e50; /* 深蓝灰 */
-            --bg-color: #f4f6f7;
-            --card-bg: #ffffff;
-            --text-color: #333;
-        }
-
+        /* 1. 赛博朋克纯黑背景与全局样式 */
         body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: #050505; /* 纯黑底色 */
+            color: #00FFFF; /* 赛博朋克标志性的青蓝色文字 */
+            font-family: 'Courier New', Courier, monospace; /* 科技感等宽字体 */
+            overflow-x: hidden; /* 防止横向滚动 */
             line-height: 1.6;
         }
 
-        /* 头部导航 */
+        /* 2. 动态枫叶飘落效果 */
+        .cyber-leaf {
+            position: fixed;
+            top: -50px;
+            width: 20px;
+            height: 20px;
+            background-color: #FF00FF; /* 霓虹紫红色枫叶 */
+            box-shadow: 0 0 10px #FF00FF, 0 0 20px #FF00FF; /* 霓虹发光效果 */
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); /* 菱形叶子形状 */
+            opacity: 0.8;
+            z-index: -1; /* 确保在文字下方 */
+            animation: cyber-fall linear infinite;
+        }
+
+        /* 为每一片叶子设置不同的动画时长、延迟和位置 */
+        .cyber-leaf:nth-child(1) { left: 10%; animation-duration: 6s; animation-delay: 0s; }
+        .cyber-leaf:nth-child(2) { left: 25%; animation-duration: 8s; animation-delay: 2s; background-color: #00FFFF; box-shadow: 0 0 10px #00FFFF; }
+        .cyber-leaf:nth-child(3) { left: 40%; animation-duration: 7s; animation-delay: 1s; }
+        .cyber-leaf:nth-child(4) { left: 55%; animation-duration: 9s; animation-delay: 3s; background-color: #00FF00; box-shadow: 0 0 10px #00FF00; }
+        .cyber-leaf:nth-child(5) { left: 70%; animation-duration: 6.5s; animation-delay: 0.5s; }
+        .cyber-leaf:nth-child(6) { left: 85%; animation-duration: 8.5s; animation-delay: 1.5s; background-color: #00FFFF; box-shadow: 0 0 10px #00FFFF; }
+        .cyber-leaf:nth-child(7) { left: 95%; animation-duration: 7.5s; animation-delay: 2.5s; }
+
+        @keyframes cyber-fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* 3. 赛博纸飞机动画 */
+        .cyber-plane {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            background-color: #FFFF00; /* 霓虹黄纸飞机 */
+            box-shadow: 0 0 15px #FFFF00, 0 0 30px #FFFF00;
+            clip-path: polygon(0% 50%, 100% 0%, 70% 50%, 100% 100%); /* 纸飞机形状 */
+            opacity: 0;
+            z-index: 0; /* 在文字下方，但在落叶上方 */
+            animation: fly-across linear infinite;
+        }
+
+        /* 设置不同飞机的飞行轨迹 */
+        .cyber-plane:nth-child(8) { top: 20%; animation-duration: 4s; animation-delay: 1s; }
+        .cyber-plane:nth-child(9) { top: 50%; animation-duration: 5s; animation-delay: 3s; background-color: #00FFFF; box-shadow: 0 0 15px #00FFFF, 0 0 30px #00FFFF; }
+        .cyber-plane:nth-child(10) { top: 80%; animation-duration: 4.5s; animation-delay: 5s; background-color: #FF00FF; box-shadow: 0 0 15px #FF00FF, 0 0 30px #FF00FF; }
+
+        @keyframes fly-across {
+            0% { left: -50px; opacity: 0; transform: rotate(-10deg); }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { left: 110%; opacity: 0; transform: rotate(10deg); }
+        }
+
+        /* 4. 赛博朋克风的文字与排版 */
         header {
-            background-color: var(--card-bg);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            padding: 1rem 2rem;
+            padding: 20px 40px;
+            border-bottom: 2px solid #FF00FF;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            position: relative;
+            z-index: 10;
         }
-
         .logo {
-            font-size: 1.5rem;
+            font-size: 24px;
             font-weight: bold;
-            color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            color: #FF00FF;
+            text-shadow: 0 0 10px #FF00FF;
         }
-
         .nav-links a {
+            color: #00FFFF;
             text-decoration: none;
-            color: var(--secondary-color);
             margin-left: 20px;
-            font-weight: 500;
+            font-size: 16px;
         }
-
-        .btn-join {
-            background-color: var(--primary-color);
-            color: white !important;
-            padding: 8px 16px;
-            border-radius: 20px;
-            transition: background 0.3s;
-        }
-
-        .btn-join:hover {
-            background-color: #c0392b;
-        }
-
-        /* Hero 区域 */
         .hero {
             text-align: center;
-            padding: 4rem 1rem;
-            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+            padding: 100px 20px;
+            position: relative;
+            z-index: 10;
         }
-
         .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--secondary-color);
+            font-size: 48px;
+            color: #FFFFFF;
+            text-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF;
+            margin-bottom: 20px;
         }
-
         .hero p {
-            font-size: 1.2rem;
-            color: #666;
+            font-size: 18px;
+            color: #AAAAAA;
             max-width: 800px;
-            margin: 0 auto 2rem;
-        }
-
-        /* 痛点与解决方案 */
-        .section {
-            padding: 3rem 1rem;
-            max-width: 1000px;
             margin: 0 auto;
         }
-
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            color: var(--secondary-color);
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-            border-top: 4px solid var(--primary-color);
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card h3 {
-            margin-top: 0;
-            color: var(--secondary-color);
-        }
-
-        /* 路线图 */
-        .roadmap-item {
-            background: var(--card-bg);
-            margin-bottom: 1.5rem;
-            padding: 1.5rem;
-            border-radius: 8px;
-            border-left: 5px solid var(--secondary-color);
+        .section {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
             position: relative;
+            z-index: 10;
         }
-
-        .phase-tag {
-            background: var(--secondary-color);
-            color: white;
-            padding: 4px 8px;
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #333;
+            padding: 20px;
+            margin-bottom: 20px;
             border-radius: 4px;
-            font-size: 0.8rem;
-            position: absolute;
-            top: -10px;
-            left: 10px;
         }
-
-        /* 底部 */
+        .card h3 { color: #FF00FF; margin-top: 0; text-shadow: 0 0 5px #FF00FF; }
         footer {
-            background-color: var(--secondary-color);
-            color: white;
             text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
+            padding: 40px;
+            color: #666;
+            border-top: 1px solid #333;
+            margin-top: 50px;
+            position: relative;
+            z-index: 10;
         }
 
-        footer a {
-            color: #ecf0f1;
-            text-decoration: underline;
-        }
-        
         /* 移动端适配 */
         @media (max-width: 600px) {
-            .hero h1 { font-size: 1.8rem; }
-            header { padding: 1rem; }
-            .nav-links { display: none; } 
+            .hero h1 { font-size: 28px; }
+            header { padding: 15px 20px; flex-direction: column; gap: 10px; }
+            .nav-links a { margin-left: 10px; font-size: 14px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 顶部导航 -->
+    <!-- 动态枫叶 -->
+    <div class="cyber-leaf"></div>
+    <div class="cyber-leaf"></div>
+    <div class="cyber-leaf"></div>
+    <div class="cyber-leaf"></div>
+    <div class="cyber-leaf"></div>
+    <div class="cyber-leaf"></div>
+    <div class="cyber-leaf"></div>
+
+    <!-- 赛博纸飞机 -->
+    <div class="cyber-plane"></div>
+    <div class="cyber-plane"></div>
+    <div class="cyber-plane"></div>
+
+    <!-- 网页内容 -->
     <header>
         <div class="logo">🍁 枫叶纸飞机</div>
         <nav class="nav-links">
             <a href="#vision">愿景</a>
             <a href="#roadmap">规划</a>
-            <a href="#" class="btn-join">参与开发</a>
+            <a href="#">参与开发</a>
         </nav>
     </header>
 
-    <!-- 主视觉区 -->
     <section class="hero">
         <h1>构建专业的纸飞机爱好者社区</h1>
         <p>致力于打造一个集公平竞技、系统教程与深度社交于一体的平台。<br>让每一次飞行都有据可依，让每一位玩家都能找到组织。</p>
-        <a href="#vision" style="color:var(--primary-color); font-weight:bold;">了解我们的理念 ↓</a>
     </section>
 
-    <!-- 核心理念/痛点解决 -->
     <section id="vision" class="section">
-        <h2 class="section-title">我们要解决什么？</h2>
-        <div class="grid-container">
-            <div class="card">
-                <h3>⚖️ 拒绝不公平竞技</h3>
-                <p>解决普通纸与特种纸同台竞技的乱象。我们将建立严格的分级赛事系统（标准组 vs 无限制组），让新手也能凭技术立足。</p>
-            </div>
-            <div class="card">
-                <h3>🤝 打破社交孤岛</h3>
-                <p>告别单打独斗。通过战队体系与成就勋章，增强玩家归属感，建立深度的社交连接。</p>
-            </div>
-            <div class="card">
-                <h3>📚 知识系统化沉淀</h3>
-                <p>拒绝碎片化短视频。建立结构化教程 Wiki 与实测验证机制，把优质经验真正留下来。</p>
-            </div>
+        <div class="card">
+            <h3>⚖️ 拒绝不公平竞技</h3>
+            <p>解决普通纸与特种纸同台竞技的乱象。我们将建立严格的分级赛事系统，让新手也能凭技术立足。</p>
+        </div>
+        <div class="card">
+            <h3>🤝 打破社交孤岛</h3>
+            <p>告别单打独斗。通过战队体系与成就勋章，增强玩家归属感，建立深度的社交连接。</p>
         </div>
     </section>
 
-    <!-- 发展路线图 -->
-    <section id="roadmap" class="section">
-        <h2 class="section-title">未来发展路线图</h2>
-        
-        <div class="roadmap-item">
-            <span class="phase-tag">第一阶段：基础建设</span>
-            <h3>🏗️ 夯实地基</h3>
-            <p>完善用户系统，建立详尽的机型图鉴。重点推出区分标准组与无限制组的分级赛事系统，确立公平竞技的核心规则。</p>
-        </div>
-
-        <div class="roadmap-item">
-            <span class="phase-tag">第二阶段：社交生态</span>
-            <h3>🌐 繁荣社区</h3>
-            <p>上线战队系统，让玩家拥有自己的阵营。推出成就勋章激励体系，并逐步填充结构化的教程 Wiki 内容。</p>
-        </div>
-
-        <div class="roadmap-item">
-            <span class="phase-tag">第三阶段：国际视野</span>
-            <h3>🌍 走向世界</h3>
-            <p>实现多语言切换，打通国内外双向流通渠道。建立全球排行榜，让中国纸飞机文化飞向世界。</p>
-        </div>
-    </section>
-
-    <!-- 底部号召 -->
     <footer>
-        <h3>认同我们的理念？</h3>
-        <p>欢迎参与开发，让我们携手让纸飞机飞得更远。</p>
         <p>© 2026 枫叶纸飞机 Maple Paper Plane Community</p>
     </footer>
 
