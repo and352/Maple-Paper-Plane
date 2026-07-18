@@ -3,100 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>枫树纸飞机
+    <title>枫树纸飞机 - 赛博卷轴</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* 1. 基础重置 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            background-color: #2a1a14; 
+            background-color: #2a1a14; /* 卷轴底色 */
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            overflow-x: auto; 
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3" fill="%23FFD700"/></svg>') 10 10, auto;
+            overflow-x: auto; /* 允许横向滚动 */
+            cursor: crosshair; /* 十字准星，避免自定义光标报错 */
         }
 
+        /* 2. 卷轴整体布局 */
         .scroll-container {
             display: flex;
-            flex-direction: row;
             min-height: 100vh;
             padding: 0 20px;
-            position: relative;
         }
 
+        /* 3. 左右木轴 */
         .wood-rod {
             width: 30px;
             background: linear-gradient(90deg, #2a1610 0%, #5d3a28 30%, #8b5a3c 50%, #5d3a28 70%, #2a1610 100%);
-            box-shadow: 0 0 15px rgba(0,0,0,0.8), inset 0 0 5px rgba(255,255,255,0.1);
-            z-index: 20;
-            position: sticky;
-            top: 0;
-            height: 100vh;
+            box-shadow: 0 0 15px rgba(0,0,0,0.8);
+            flex-shrink: 0; /* 防止木轴被压缩 */
         }
-        .wood-rod.left { border-radius: 5px 0 0 5px; }
-        .wood-rod.right { border-radius: 0 5px 5px 0; }
 
+        /* 4. 宣纸内容区 */
         .paper-area {
             flex: 1;
-            background-color: #f4e4bc; 
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(139, 90, 60, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(139, 90, 60, 0.05) 0%, transparent 50%);
+            background-color: #f4e4bc; /* 宣纸黄 */
             padding: 60px 40px;
-            box-shadow: inset 0 0 50px rgba(139, 90, 60, 0.2); 
-            position: relative;
-            z-index: 10;
+            box-shadow: inset 0 0 50px rgba(139, 90, 60, 0.2);
+            display: flex;
+            flex-direction: row-reverse; /* 关键：让竖排文字从右向左排列 */
         }
 
+        /* 5. 竖排文字列 */
         .vertical-col {
             writing-mode: vertical-rl;
-            text-orientation: mixed;
             font-family: 'STKaiti', 'KaiTi', 'SimSun', serif;
             font-size: 1.4rem;
             line-height: 2.2;
             letter-spacing: 0.3em;
-            color: #2c2c2c; 
-            margin-right: 40px;
+            color: #2c2c2c; /* 墨色 */
+            margin-left: 40px; /* 竖排从右向左，用margin-left控制列间距 */
             white-space: nowrap;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1); 
         }
 
+        /* 6. 标题与副标题 */
         .col-title {
             font-size: 2.8rem;
-            font-weight: 900;
+            font-weight: bold;
             color: #1a1a1a;
-            margin-right: 60px;
-            position: relative;
         }
-        .col-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            right: 0;
-            width: 100%;
-            height: 2px;
-            background: #8b5a3c;
-            opacity: 0.5;
-        }
-
         .col-subtitle {
             font-size: 1.6rem;
             color: #5d3a28;
-            margin-right: 50px;
         }
 
-        .sep {
-            color: #8b5a3c;
-            margin: 0 8px;
-            opacity: 0.6;
-        }
-
-        /* --- 朱砂印章按钮样式 --- */
+        /* 7. 朱砂印章按钮 */
         .seal-btn {
-            display: inline-block;
             padding: 15px 10px;
-            border: 3px double #b22222; /* 朱砂红双线边框 */
+            border: 3px double #b22222;
             color: #b22222;
             font-family: 'STKaiti', 'KaiTi', serif;
             font-size: 1.4rem;
@@ -104,38 +74,36 @@
             letter-spacing: 0.5em;
             cursor: pointer;
             text-decoration: none;
+            background: rgba(178, 34, 34, 0.05);
             transition: all 0.3s ease;
-            background: rgba(178, 34, 34, 0.05); /* 极淡的红色底色 */
-            margin-right: 60px; /* 保持和其他列一样的间距 */
-            align-self: flex-start; /* 靠上对齐 */
         }
         .seal-btn:hover {
             background: #b22222;
-            color: #f4e4bc; /* 悬停时反色 */
+            color: #f4e4bc;
             box-shadow: 0 0 15px rgba(178, 34, 34, 0.6);
         }
 
-        /* --- 一大四小黄星星特效 --- */
+        /* 8. 段落分隔符 */
+        .sep { color: #8b5a3c; margin: 0 8px; opacity: 0.6; }
+
+        /* 9. 星星爆炸特效 */
         .explosion-particle {
             position: fixed;
             pointer-events: none;
             z-index: 9999;
             animation: explode-fade 0.8s ease-out forwards;
         }
-
         @keyframes explode-fade {
             0% { transform: scale(0) rotate(0deg); opacity: 1; }
             50% { opacity: 1; }
             100% { transform: scale(1.5) rotate(180deg); opacity: 0; }
         }
-
         .star-big {
             width: 40px; height: 40px;
             background-color: #FFD700;
             clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
             filter: drop-shadow(0 0 8px #FFD700);
         }
-
         .star-small {
             width: 15px; height: 15px;
             background-color: #FFFF00;
@@ -147,12 +115,25 @@
 <body>
 
 <div class="scroll-container">
-    <div class="wood-rod left"></div>
-
+    <div class="wood-rod"></div>
+    
     <div class="paper-area">
-        <div class="vertical-col col-title">枫树纸飞机</div>
-        <div class="vertical-col col-subtitle">重塑折叠的艺术</div>
+        <!-- 注意：因为使用了 flex-direction: row-reverse，HTML里的顺序是反的 -->
+        
+        <!-- 招募按钮 -->
+        <a href="javascript:void(0)" class="vertical-col seal-btn" id="joinBtn">加入我们</a>
 
+        <!-- 规划与号召 -->
+        <div class="vertical-col">
+            我们将建立一个国内国外都能交流的平台，让每个玩家都能找到组织<span class="sep">|</span>
+            我们的发展计划分为三个阶段<span class="sep">|</span>
+            第一步打基础。建立用户系统和机型图鉴，推出标准组和无限制组的分级比赛<span class="sep">|</span>
+            第二步建生态。上线战队系统和成就勋章，搭建结构化的教程百科<span class="sep">|</span>
+            第三步走向世界。支持多语言切换，开启全球排行榜，让中国折法被世界看到<span class="sep">|</span>
+            如果你也认同这个想法，欢迎加入我们的开发团队，让我们一起把这件事做成
+        </div>
+
+        <!-- 愿景与痛点 -->
         <div class="vertical-col">
             我们想打造一个属于纸飞机爱好者的专属社区<span class="sep">|</span>
             在这里，大家不仅能公平竞技，还能学到系统的教程，结交志同道合的朋友<span class="sep">|</span>
@@ -163,20 +144,14 @@
             第三，教程太零散。好方法散落在各处，缺乏系统的整理和真实的测试验证
         </div>
 
-        <div class="vertical-col">
-            我们将建立一个国内国外都能交流的平台，让每个玩家都能找到组织<span class="sep">|</span>
-            我们的发展计划分为三个阶段<span class="sep">|</span>
-            第一步打基础。建立用户系统和机型图鉴，推出标准组和无限制组的分级比赛<span class="sep">|</span>
-            第二步建生态。上线战队系统和成就勋章，搭建结构化的教程百科<span class="sep">|</span>
-            第三步走向世界。支持多语言切换，开启全球排行榜，让中国折法被世界看到<span class="sep">|</span>
-            如果你也认同这个想法，欢迎加入我们的开发团队，让我们一起把这件事做成
-        </div>
+        <!-- 副标题 -->
+        <div class="vertical-col col-subtitle">重塑折叠的艺术</div>
 
-        <!-- 新增的朱砂印章按钮 -->
-        <a href="javascript:void(0)" class="seal-btn" id="joinBtn">加入我们</a>
+        <!-- 主标题 -->
+        <div class="vertical-col col-title">枫树纸飞机</div>
     </div>
 
-    <div class="wood-rod right"></div>
+    <div class="wood-rod"></div>
 </div>
 
 <script>
@@ -211,10 +186,7 @@
 
     // 2. 加入按钮的交互逻辑
     document.getElementById('joinBtn').addEventListener('click', function(e) {
-        // 阻止星星特效在点击按钮时触发
-        e.stopPropagation(); 
-        
-        // 弹出古风提示语（联系方式暂留空，用暗号代替）
+        e.stopPropagation(); // 阻止冒泡，防止点按钮时炸星星
         alert("同好留步！\n\n若愿共襄盛举，请循江湖暗号联络吾辈。\n\n（联系方式筹备中，敬请期待）");
     });
 </script>
