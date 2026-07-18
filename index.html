@@ -5,242 +5,288 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>枫树纸飞机 - 赛博卷轴</title>
     <style>
-        /* --- 基础重置 --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        /* --- 基础重置与暗夜模式变量 --- */
+        :root {
+            --bg-color: #2a1a14;
+            --paper-color: #f4e4bc;
+            --text-color: #2c2c2c;
+            --accent-color: #b22222;
+        }
+        body.dark-mode {
+            --bg-color: #0f0805;
+            --paper-color: #2c241b;
+            --text-color: #d4af37;
+            --accent-color: #ff4500;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: background-color 0.5s, color 0.5s; }
         body {
-            background-color: #2a1a14; /* 卷轴底色 */
+            background-color: var(--bg-color);
             min-height: 100vh;
             overflow-x: auto; 
             cursor: crosshair;
-            font-family: 'STKaiti', 'KaiTi', serif; /* 默认中文字体 */
+            font-family: 'STKaiti', 'KaiTi', serif;
+        }
+
+        /* 金色烟雾画布 (绝对定位，覆盖在卷轴上但不阻挡点击) */
+        #smoke-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* 关键：让鼠标点击穿透画布 */
+            z-index: 50;
         }
 
         /* --- 卷轴布局 --- */
         .scroll-container {
             display: flex;
             min-height: 100vh;
-            padding: 0 20px;
-            transition: all 0.5s ease;
+            padding: 80px 20px 40px; 
         }
-
-        /* --- 木轴样式 --- */
         .wood-rod {
             width: 30px;
             background: linear-gradient(90deg, #2a1610 0%, #5d3a28 30%, #8b5a3c 50%, #5d3a28 70%, #2a1610 100%);
-            box-shadow: inset 0 0 10px #000;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
             flex-shrink: 0;
+            border-radius: 4px;
         }
-
-        /* --- 宣纸内容区 --- */
         .paper-content {
             flex: 1;
-            background-color: #f4e4bc;
-            background-image: radial-gradient(#e6d5aa 1px, transparent 1px);
-            background-size: 20px 20px; /* 模拟纸张纹理 */
+            background-color: var(--paper-color);
             padding: 40px;
-            
-            /* 竖排核心属性 */
-            writing-mode: vertical-rl; 
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
+            writing-mode: vertical-rl;
             text-orientation: upright;
-            
+            letter-spacing: 0.2em;
+            line-height: 2;
+            overflow-x: auto;
             display: flex;
             align-items: flex-start;
-            gap: 40px;
-            overflow-x: auto;
-            white-space: nowrap; /* 防止文字换行破坏竖排 */
+            gap: 30px;
         }
 
-        /* --- 文本列样式 --- */
-        .text-column {
-            height: 80vh;
-            font-size: 24px;
-            line-height: 1.8;
-            color: #2c2c2c;
-            letter-spacing: 4px;
-            text-align: justify;
-        }
+        /* --- 文本样式 --- */
+        h1 { font-size: 2.5rem; color: var(--text-color); white-space: nowrap; }
+        .text-col { font-size: 1.1rem; color: var(--text-color); white-space: pre-wrap; max-height: 80vh; }
 
-        .main-title {
-            font-size: 42px;
-            font-weight: bold;
-            color: #1a1a1a;
-            border-left: 2px solid rgba(0,0,0,0.1);
-            padding-left: 20px;
-        }
-
-        /* --- 加入我们按钮 (印章风格) --- */
-        .join-btn {
-            border: 3px double #b22222;
-            color: #b22222;
-            padding: 20px 10px;
-            font-weight: bold;
-            font-size: 28px;
-            cursor: pointer;
-            background: rgba(255,255,255,0.3);
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .join-btn:hover {
-            background: #b22222;
-            color: #f4e4bc;
-        }
-
-        /* --- 翻译切换按钮 (悬浮) --- */
-        .lang-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 100;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #b22222;
-            color: #f4e4bc;
-            border: 2px solid #f4e4bc;
-            font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.3s;
-        }
-        .lang-toggle:hover {
-            transform: scale(1.1);
-        }
-
-        /* --- 星星特效容器 --- */
-        .star {
-            position: absolute;
-            pointer-events: none;
-            animation: star-fade 1s forwards;
-        }
-        @keyframes star-fade {
-            0% { transform: scale(0) rotate(0deg); opacity: 1; }
-            50% { opacity: 1; }
-            100% { transform: scale(1.5) rotate(180deg); opacity: 0; }
-        }
-
-        /* ========================
-           英文模式适配 (关键修改)
-           ======================== */
-        body.en-mode {
-            font-family: 'Georgia', 'Times New Roman', serif; /* 切换为衬线体 */
-        }
-        
+        /* --- 英文横排模式 --- */
         body.en-mode .paper-content {
-            writing-mode: horizontal-tb; /* 恢复横排 */
-            flex-direction: column;     /* 改为从上到下排列 */
-            align-items: center;
+            writing-mode: horizontal-tb;
+            flex-direction: column;
+            align-items: flex-start;
+            overflow-x: hidden;
             overflow-y: auto;
-            white-space: normal;
             gap: 20px;
         }
+        body.en-mode h1 { margin-bottom: 20px; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; }
+        body.en-mode .text-col { font-family: 'Georgia', serif; max-height: none; line-height: 1.8; }
 
-        body.en-mode .text-column {
-            height: auto;
-            width: 80%;
-            max-width: 800px;
-            text-align: left;
-            line-height: 1.6;
-            letter-spacing: normal;
-            border-bottom: 1px dashed rgba(0,0,0,0.1);
-            padding-bottom: 20px;
+        /* --- 顶部工具栏 (油灯 & 里程) --- */
+        .top-bar {
+            position: fixed; top: 20px; left: 20px; right: 20px;
+            display: flex; justify-content: space-between; z-index: 100; pointer-events: none;
+        }
+        .tool-btn {
+            pointer-events: auto; background: rgba(0,0,0,0.6); color: #fff;
+            border: 1px solid #d4af37; padding: 8px 15px; border-radius: 20px;
+            cursor: pointer; font-size: 14px; backdrop-filter: blur(5px);
+        }
+        .mileage-box {
+            pointer-events: auto; background: rgba(0,0,0,0.6); color: #d4af37;
+            padding: 8px 15px; border-radius: 20px; border: 1px solid #d4af37; font-weight: bold;
         }
 
-        body.en-mode .main-title {
-            font-size: 36px;
-            border-left: none;
-            border-bottom: 2px solid #1a1a1a;
-            padding-left: 0;
-            padding-bottom: 10px;
-            text-align: center;
-            width: 100%;
+        /* --- 语言切换按钮 --- */
+        .lang-switch {
+            position: fixed; top: 20px; right: 80px; z-index: 100;
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--accent-color); color: #fff; border: 2px solid #fff;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-weight: bold; font-size: 12px;
         }
 
-        body.en-mode .join-btn {
-            font-size: 20px;
-            padding: 10px 20px;
-            margin-top: 20px;
+        /* --- 加入我们按钮 --- */
+        .join-btn {
+            writing-mode: horizontal-tb;
+            border: 3px double var(--accent-color); color: var(--accent-color);
+            padding: 15px 10px; font-size: 1.2rem; font-weight: bold;
+            cursor: pointer; background: transparent; transition: all 0.3s;
+            white-space: nowrap; align-self: center;
         }
+        .join-btn:hover { background: var(--accent-color); color: #fff; }
+
+        /* --- 留言区 --- */
+        .guestbook {
+            writing-mode: horizontal-tb;
+            border-left: 2px dashed var(--text-color);
+            padding-left: 20px; margin-left: 20px;
+            min-width: 200px; max-width: 250px;
+        }
+        body.en-mode .guestbook { border-left: none; border-top: 2px dashed var(--text-color); padding-left: 0; padding-top: 20px; margin-left: 0; max-width: 100%; width: 100%; }
+        .gb-title { font-size: 1.2rem; margin-bottom: 10px; font-weight: bold; }
+        .input-group { display: flex; gap: 5px; margin-bottom: 10px; }
+        input { padding: 5px; border: 1px solid var(--text-color); background: transparent; color: var(--text-color); outline: none; flex: 1; font-size: 12px;}
+        button.submit-btn { padding: 5px 10px; background: var(--accent-color); color: #fff; border: none; cursor: pointer; font-size: 12px; }
+        .msg-list { display: flex; flex-direction: column; gap: 8px; font-size: 12px; max-height: 300px; overflow-y: auto; }
+        .msg-card { border-bottom: 1px dashed rgba(0,0,0,0.2); padding-bottom: 5px; }
+
+        /* --- 弹窗与徽章 --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: var(--paper-color); padding: 40px; border: 4px double var(--accent-color); text-align: center; max-width: 80%; position: relative; }
+        .close-modal { position: absolute; top: 10px; right: 10px; cursor: pointer; font-size: 24px; color: var(--accent-color); }
+        .badge-popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); background: radial-gradient(circle, #ffd700, #b8860b); padding: 30px; border-radius: 50%; color: #fff; text-align: center; box-shadow: 0 0 50px rgba(255, 215, 0, 0.5); z-index: 2000; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .badge-popup.show { transform: translate(-50%, -50%) scale(1); }
+
+        /* --- 星星特效 --- */
+        .star { position: fixed; pointer-events: none; z-index: 9999; animation: star-fade 1s forwards; }
+        @keyframes star-fade { 0% { transform: scale(0) rotate(0deg); opacity: 1; } 100% { transform: scale(1.5) rotate(180deg); opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <!-- 翻译切换按钮 -->
-    <button class="lang-toggle" onclick="toggleLanguage()">文 / EN</button>
+    <!-- 金色烟雾画布 -->
+    <canvas id="smoke-canvas"></canvas>
 
+    <!-- 顶部工具栏 -->
+    <div class="top-bar">
+        <button class="tool-btn" onclick="toggleDarkMode()">🏮 挑灯/熄灯</button>
+        <div class="mileage-box">✈️ 飞行里程: <span id="mileage-count">0</span> km</div>
+    </div>
+    <div class="lang-switch" onclick="toggleLang()">文/EN</div>
+
+    <!-- 卷轴主体 -->
     <div class="scroll-container">
         <div class="wood-rod"></div>
-        
-        <div class="paper-content" id="contentArea">
-            <!-- 标题 -->
-            <div class="text-column main-title" data-zh="枫树纸飞机" data-en="Maple Paper Plane">
-                枫树纸飞机
-            </div>
+        <div class="paper-content" id="paper">
+            <h1 id="main-title">枫树纸飞机</h1>
+            <div class="text-col" id="main-content">【愿景】
+构建集公平竞技、系统教程与深度社交于一体的爱好者社区。
 
-            <!-- 副标题 -->
-            <div class="text-column" data-zh="重塑折叠的艺术" data-en="Reshaping the Art of Folding">
-                重塑折叠的艺术
-            </div>
+【破局】
+短视频圈子虽大，却重娱乐轻沉淀。我们直击三大痛点：
+一曰不公：普通纸与特种纸混战，新手难立足；
+二曰孤岛：缺乏战队体系，玩家单打独斗无归属；
+三曰碎片：优质教程散落，缺实测验证机制。
 
-            <!-- 正文段落1 -->
-            <div class="text-column" data-zh="我们将建立一个国内国外都能交流的平台，让每个玩家都能找到组织——我们的发展计划" data-en="We are building a global platform for enthusiasts worldwide to connect. Our goal is to ensure every player finds their community.">
-                我们将建立一个国内国外都能交流的平台，让每个玩家都能找到组织——我们的发展计划
-            </div>
+【规划】
+我们将建立兼顾国内外的双向流通平台。
+一期筑基：用户系统、机型图鉴、分级赛事；
+二期生态：战队系统、成就勋章、结构化Wiki；
+三期出海：多语言切换、全球排行榜。
 
-            <!-- 正文段落2 -->
-            <div class="text-column" data-zh="我们想打造一个属于纸飞机爱好者的专属社区——在这里，大家不仅能公平竞技，还能学..." data-en="We aim to create an exclusive community for paper plane lovers. Here, you can compete fairly and learn from each other...">
-                我们想打造一个属于纸飞机爱好者的专属社区——在这里，大家不仅能公平竞技，还能学...
-            </div>
+若认同此道，诚邀入伙，共襄盛举。</div>
+            
+            <div class="join-btn" onclick="openModal()" id="btn-text">加入我们</div>
 
-            <!-- 加入我们按钮 -->
-            <div class="text-column" style="border:none;">
-                <div class="join-btn" data-zh="加入我们" data-en="Join Us" onclick="alert('请联系管理员获取入群方式！')">
-                    加入我们
+            <!-- 留言区 -->
+            <div class="guestbook">
+                <div class="gb-title" id="gb-title">📜 云端投递</div>
+                <div class="input-group">
+                    <input type="text" id="nickname" placeholder="名号">
+                    <input type="text" id="message" placeholder="寄语...">
+                    <button class="submit-btn" onclick="addMessage()" id="btn-submit">投递</button>
                 </div>
+                <div class="msg-list" id="msg-list"></div>
             </div>
         </div>
-
         <div class="wood-rod"></div>
     </div>
 
-    <script>
-        // 1. 翻译功能逻辑
-        let isEnglish = false;
-        
-        function toggleLanguage() {
-            isEnglish = !isEnglish;
-            const elements = document.querySelectorAll('[data-zh]');
-            const body = document.body;
+    <!-- 弹窗 -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h3 style="color:var(--accent-color); margin-bottom:15px;" id="modal-title">江湖传书</h3>
+            <p id="modal-text">群聊暂未开启，请稍候片刻。<br>飞鸽传书正在路上...</p>
+        </div>
+    </div>
 
-            if (isEnglish) {
-                // 切换到英文
-                body.classList.add('en-mode');
-                elements.forEach(el => {
-                    el.innerText = el.getAttribute('data-en');
-                });
-            } else {
-                // 切换回中文
-                body.classList.remove('en-mode');
-                elements.forEach(el => {
-                    el.innerText = el.getAttribute('data-zh');
-                });
+    <!-- 徽章 -->
+    <div class="badge-popup" id="badge">
+        <div style="font-size:40px;">🏆</div>
+        <div style="font-weight:bold; font-size:20px;">王牌飞行员</div>
+        <div style="font-size:12px;">飞行里程破百</div>
+    </div>
+
+    <script>
+        // --- 1. 数据配置 ---
+        const data = {
+            zh: {
+                title: "枫树纸飞机",
+                content: `【愿景】\n构建集公平竞技、系统教程与深度社交于一体的爱好者社区。\n\n【破局】\n短视频圈子虽大，却重娱乐轻沉淀。我们直击三大痛点：\n一曰不公：普通纸与特种纸混战，新手难立足；\n二曰孤岛：缺乏战队体系，玩家单打独斗无归属；\n三曰碎片：优质教程散落，缺实测验证机制。\n\n【规划】\n我们将建立兼顾国内外的双向流通平台。\n一期筑基：用户系统、机型图鉴、分级赛事；\n二期生态：战队系统、成就勋章、结构化Wiki；\n三期出海：多语言切换、全球排行榜。\n\n若认同此道，诚邀入伙，共襄盛举。`,
+                btn: "加入我们", gbTitle: "📜 云端投递", placeholder1: "名号", placeholder2: "寄语...", submit: "投递",
+                modalTitle: "江湖传书", modalText: "群聊暂未开启，请稍候片刻。\n飞鸽传书正在路上..."
+            },
+            en: {
+                title: "Maple Paper Plane",
+                content: `[Vision]\nBuilding a community integrating fair competition, systematic tutorials, and deep social interaction.\n\n[The Problem]\nShort video platforms have huge traffic but prioritize entertainment over substance. We address three pain points:\n1. Unfairness: Standard and specialty papers compete together, making it hard for beginners.\n2. Isolation: Lack of team systems leaves players fighting alone.\n3. Fragmentation: Quality tutorials are scattered, lacking verified testing mechanisms.\n\n[Roadmap]\nA platform connecting enthusiasts globally.\nPhase 1: User system, model database, tiered tournaments.\nPhase 2: Team system, achievement badges, structured Wiki.\nPhase 3: Internationalization with multi-language support & global leaderboards.\n\nIf you share this vision, join us in development.`,
+                btn: "Join Us", gbTitle: "📜 Cloud Guestbook", placeholder1: "Name", placeholder2: "Message...", submit: "Send",
+                modalTitle: "Message from Jianghu", modalText: "The group chat is not open yet, please wait.\nThe carrier pigeon is on its way..."
             }
+        };
+
+        let currentLang = 'zh';
+        let mileage = parseInt(localStorage.getItem('maple_mileage')) || 0;
+        document.getElementById('mileage-count').innerText = mileage;
+
+        // --- 2. 语言切换 ---
+        function toggleLang() {
+            currentLang = currentLang === 'zh' ? 'en' : 'zh';
+            document.body.classList.toggle('en-mode');
+            const d = data[currentLang];
+            document.getElementById('main-title').innerText = d.title;
+            document.getElementById('main-content').innerText = d.content;
+            document.getElementById('btn-text').innerText = d.btn;
+            document.getElementById('gb-title').innerText = d.gbTitle;
+            document.getElementById('nickname').placeholder = d.placeholder1;
+            document.getElementById('message').placeholder = d.placeholder2;
+            document.getElementById('btn-submit').innerText = d.submit;
+            document.getElementById('modal-title').innerText = d.modalTitle;
+            document.getElementById('modal-text').innerText = d.modalText;
         }
 
-        // 2. 点击星星特效逻辑 (一大四小)
+        // --- 3. 暗夜模式 ---
+        function toggleDarkMode() { document.body.classList.toggle('dark-mode'); }
+
+        // --- 4. 弹窗 ---
+        function openModal() { document.getElementById('modal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('modal').style.display = 'none'; }
+
+        // --- 5. 留言系统 ---
+        function addMessage() {
+            const nick = document.getElementById('nickname').value.trim();
+            const msg = document.getElementById('message').value.trim();
+            if (!nick || !msg) return;
+            const list = document.getElementById('msg-list');
+            const card = document.createElement('div');
+            card.className = 'msg-card';
+            card.innerHTML = `<strong>${nick}:</strong> ${msg}`;
+            list.prepend(card);
+            document.getElementById('nickname').value = '';
+            document.getElementById('message').value = '';
+        }
+
+        // --- 6. 星星特效与里程 ---
         document.addEventListener('click', function(e) {
-            createStar(e.clientX, e.clientY, true); // 大星星
+            if (e.target.closest('.join-btn') || e.target.closest('.modal-content') || e.target.closest('.tool-btn') || e.target.closest('.lang-switch') || e.target.closest('.submit-btn') || e.target.closest('input')) return;
             
-            // 随机生成4个小星星围绕
+            mileage++;
+            document.getElementById('mileage-count').innerText = mileage;
+            localStorage.setItem('maple_mileage', mileage);
+            
+            if (mileage === 100) {
+                const badge = document.getElementById('badge');
+                badge.classList.add('show');
+                setTimeout(() => badge.classList.remove('show'), 3000);
+            }
+
+            createStar(e.clientX, e.clientY, true);
             for(let i=0; i<4; i++) {
                 setTimeout(() => {
-                    const offsetX = (Math.random() - 0.5) * 60;
-                    const offsetY = (Math.random() - 0.5) * 60;
+                    const offsetX = (Math.random() - 0.5) * 80;
+                    const offsetY = (Math.random() - 0.5) * 80;
                     createStar(e.clientX + offsetX, e.clientY + offsetY, false);
                 }, i * 50);
             }
@@ -250,26 +296,68 @@
             const star = document.createElement('div');
             star.innerHTML = '★';
             star.className = 'star';
-            
-            // 设置大小和颜色
-            const size = isBig ? '40px' : '20px';
-            const color = '#FFD700'; // 金黄色
-            
             star.style.left = x + 'px';
             star.style.top = y + 'px';
-            star.style.fontSize = size;
-            star.style.color = color;
-            
-            // 修正定位中心点
+            star.style.fontSize = isBig ? '40px' : '20px';
+            star.style.color = '#FFD700';
             star.style.transform = 'translate(-50%, -50%)';
-            
             document.body.appendChild(star);
-            
-            // 动画结束后移除元素
-            setTimeout(() => {
-                star.remove();
-            }, 1000);
+            setTimeout(() => star.remove(), 1000);
         }
+
+        // --- 7. 金色烟雾特效 (Canvas 粒子系统) ---
+        const canvas = document.getElementById('smoke-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 5 + 2;
+                this.speedX = (Math.random() - 0.5) * 2;
+                this.speedY = (Math.random() - 0.5) * 2 - 1; // 烟雾向上飘
+                this.opacity = Math.random() * 0.5 + 0.3;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.opacity -= 0.01; // 慢慢消散
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 215, 0, ${this.opacity})`; // 金色
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function animateSmoke() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].opacity <= 0) particles.splice(i, 1);
+            }
+            requestAnimationFrame(animateSmoke);
+        }
+        animateSmoke();
+
+        // 监听鼠标移动和触摸滑动
+        window.addEventListener('mousemove', (e) => {
+            for(let i=0; i<2; i++) particles.push(new Particle(e.clientX, e.clientY));
+        });
+        window.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            for(let i=0; i<2; i++) particles.push(new Particle(touch.clientX, touch.clientY));
+        });
     </script>
 </body>
 </html>
