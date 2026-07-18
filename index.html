@@ -3,72 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>枫树纸飞机 - 重塑折叠的艺术</title>
+    <title>枫树纸飞机
     <style>
-        /* --- 基础重置与全局样式 --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
-            background-color: #050505; /* 深邃纯黑底色 */
-            color: #d4c5a3; /* 宣纸般的复古暖黄色 */
-            font-family: 'STKaiti', 'KaiTi', 'Courier New', monospace; /* 优先使用楷体 */
-            overflow-x: auto; /* 允许横向滚动，因为竖排文字很长 */
+            background-color: #2a1a14; 
             min-height: 100vh;
             display: flex;
+            justify-content: center;
             align-items: flex-start;
-            cursor: crosshair;
+            overflow-x: auto; 
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3" fill="%23FFD700"/></svg>') 10 10, auto;
         }
 
-        /* --- 核心竖排容器 --- */
-        .vertical-scroll {
+        .scroll-container {
             display: flex;
-            flex-direction: row; /* 让列从左向右排列，配合竖排实现从右向左阅读 */
-            padding: 40px 20px;
+            flex-direction: row;
             min-height: 100vh;
+            padding: 0 20px;
+            position: relative;
         }
 
-        /* --- 竖排文字列 --- */
-        .vertical-col {
-            writing-mode: vertical-rl; /* 核心属性：竖排，从右向左 */
-            text-orientation: mixed;
-            font-size: 1.2rem;
-            line-height: 2.5; /* 竖排文字需要更大的行高才透气 */
-            letter-spacing: 0.2em; /* 字间距拉开，更有古意 */
-            margin-right: 30px; /* 列与列之间的间距 */
-            white-space: nowrap; /* 防止文字折行 */
+        .wood-rod {
+            width: 30px;
+            background: linear-gradient(90deg, #2a1610 0%, #5d3a28 30%, #8b5a3c 50%, #5d3a28 70%, #2a1610 100%);
+            box-shadow: 0 0 15px rgba(0,0,0,0.8), inset 0 0 5px rgba(255,255,255,0.1);
+            z-index: 20;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+        .wood-rod.left { border-radius: 5px 0 0 5px; }
+        .wood-rod.right { border-radius: 0 5px 5px 0; }
+
+        .paper-area {
+            flex: 1;
+            background-color: #f4e4bc; 
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(139, 90, 60, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 90, 60, 0.05) 0%, transparent 50%);
+            padding: 60px 40px;
+            box-shadow: inset 0 0 50px rgba(139, 90, 60, 0.2); 
             position: relative;
             z-index: 10;
         }
 
-        /* 标题列的特殊样式 */
+        .vertical-col {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-family: 'STKaiti', 'KaiTi', 'SimSun', serif;
+            font-size: 1.4rem;
+            line-height: 2.2;
+            letter-spacing: 0.3em;
+            color: #2c2c2c; 
+            margin-right: 40px;
+            white-space: nowrap;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1); 
+        }
+
         .col-title {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #ffcc66;
-            letter-spacing: 0.5em;
-            margin-right: 50px;
-            text-shadow: 0 0 10px rgba(255, 204, 102, 0.3);
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: #1a1a1a;
+            margin-right: 60px;
+            position: relative;
+        }
+        .col-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 0;
+            width: 100%;
+            height: 2px;
+            background: #8b5a3c;
+            opacity: 0.5;
         }
 
         .col-subtitle {
-            font-size: 1.5rem;
-            color: #aa8855;
-            margin-right: 40px;
+            font-size: 1.6rem;
+            color: #5d3a28;
+            margin-right: 50px;
         }
 
-        /* 强调文字 */
-        strong {
-            color: #fff;
-            font-weight: bold;
-        }
-
-        /* 段落分隔符（用竖线代替标点） */
         .sep {
-            color: #555;
-            margin: 0 10px;
+            color: #8b5a3c;
+            margin: 0 8px;
+            opacity: 0.6;
         }
 
-        /* --- 点击爆炸特效 CSS (一大四小黄星星) --- */
+        /* --- 朱砂印章按钮样式 --- */
+        .seal-btn {
+            display: inline-block;
+            padding: 15px 10px;
+            border: 3px double #b22222; /* 朱砂红双线边框 */
+            color: #b22222;
+            font-family: 'STKaiti', 'KaiTi', serif;
+            font-size: 1.4rem;
+            font-weight: bold;
+            letter-spacing: 0.5em;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            background: rgba(178, 34, 34, 0.05); /* 极淡的红色底色 */
+            margin-right: 60px; /* 保持和其他列一样的间距 */
+            align-self: flex-start; /* 靠上对齐 */
+        }
+        .seal-btn:hover {
+            background: #b22222;
+            color: #f4e4bc; /* 悬停时反色 */
+            box-shadow: 0 0 15px rgba(178, 34, 34, 0.6);
+        }
+
+        /* --- 一大四小黄星星特效 --- */
         .explosion-particle {
             position: fixed;
             pointer-events: none;
@@ -82,20 +129,16 @@
             100% { transform: scale(1.5) rotate(180deg); opacity: 0; }
         }
 
-        /* 大星星样式 */
         .star-big {
-            width: 40px;
-            height: 40px;
-            background-color: #FFD700; /* 金黄色 */
+            width: 40px; height: 40px;
+            background-color: #FFD700;
             clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            filter: drop-shadow(0 0 10px #FFD700);
+            filter: drop-shadow(0 0 8px #FFD700);
         }
 
-        /* 小星星样式 */
         .star-small {
-            width: 15px;
-            height: 15px;
-            background-color: #FFFF00; /* 亮黄色 */
+            width: 15px; height: 15px;
+            background-color: #FFFF00;
             clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
             filter: drop-shadow(0 0 5px #FFFF00);
         }
@@ -103,73 +146,77 @@
 </head>
 <body>
 
-<!-- 竖排文字内容区 -->
-<div class="vertical-scroll">
-    <!-- 第一列：主标题 -->
-    <div class="vertical-col col-title">枫树纸飞机</div>
-    
-    <!-- 第二列：副标题 -->
-    <div class="vertical-col col-subtitle">重塑折叠的艺术</div>
+<div class="scroll-container">
+    <div class="wood-rod left"></div>
 
-    <!-- 第三列：我们是谁 & 解决什么问题 -->
-    <div class="vertical-col">
-        我们想打造一个属于纸飞机爱好者的专属社区<span class="sep">|</span>
-        在这里，大家不仅能公平竞技，还能学到系统的教程，结交志同道合的朋友<span class="sep">|</span>
-        现在的短视频平台虽然热闹，但往往只顾着娱乐，缺少真正的技术沉淀<span class="sep">|</span>
-        所以我们决定站出来，解决大家最头疼的三个问题<span class="sep">|</span>
-        第一，比赛不公平。普通纸和特种纸混在一起比，新手根本没有机会出头<span class="sep">|</span>
-        第二，大家太孤单。很多高手都在单打独斗，缺少战队和归属感<span class="sep">|</span>
-        第三，教程太零散。好方法散落在各处，缺乏系统的整理和真实的测试验证
+    <div class="paper-area">
+        <div class="vertical-col col-title">枫树纸飞机</div>
+        <div class="vertical-col col-subtitle">重塑折叠的艺术</div>
+
+        <div class="vertical-col">
+            我们想打造一个属于纸飞机爱好者的专属社区<span class="sep">|</span>
+            在这里，大家不仅能公平竞技，还能学到系统的教程，结交志同道合的朋友<span class="sep">|</span>
+            现在的短视频平台虽然热闹，但往往只顾着娱乐，缺少真正的技术沉淀<span class="sep">|</span>
+            所以我们决定站出来，解决大家最头疼的三个问题<span class="sep">|</span>
+            第一，比赛不公平。普通纸和特种纸混在一起比，新手根本没有机会出头<span class="sep">|</span>
+            第二，大家太孤单。很多高手都在单打独斗，缺少战队和归属感<span class="sep">|</span>
+            第三，教程太零散。好方法散落在各处，缺乏系统的整理和真实的测试验证
+        </div>
+
+        <div class="vertical-col">
+            我们将建立一个国内国外都能交流的平台，让每个玩家都能找到组织<span class="sep">|</span>
+            我们的发展计划分为三个阶段<span class="sep">|</span>
+            第一步打基础。建立用户系统和机型图鉴，推出标准组和无限制组的分级比赛<span class="sep">|</span>
+            第二步建生态。上线战队系统和成就勋章，搭建结构化的教程百科<span class="sep">|</span>
+            第三步走向世界。支持多语言切换，开启全球排行榜，让中国折法被世界看到<span class="sep">|</span>
+            如果你也认同这个想法，欢迎加入我们的开发团队，让我们一起把这件事做成
+        </div>
+
+        <!-- 新增的朱砂印章按钮 -->
+        <a href="javascript:void(0)" class="seal-btn" id="joinBtn">加入我们</a>
     </div>
 
-    <!-- 第四列：未来规划 & 招募 -->
-    <div class="vertical-col">
-        我们将建立一个国内国外都能交流的平台，让每个玩家都能找到组织<span class="sep">|</span>
-        我们的发展计划分为三个阶段<span class="sep">|</span>
-        第一步打基础。建立用户系统和机型图鉴，推出标准组和无限制组的分级比赛<span class="sep">|</span>
-        第二步建生态。上线战队系统和成就勋章，搭建结构化的教程百科<span class="sep">|</span>
-        第三步走向世界。支持多语言切换，开启全球排行榜，让中国折法被世界看到<span class="sep">|</span>
-        如果你也认同这个想法，欢迎加入我们的开发团队，让我们一起把这件事做成
-    </div>
+    <div class="wood-rod right"></div>
 </div>
 
 <script>
-    // --- 点击爆炸特效逻辑 (一大四小黄星星) ---
+    // 1. 点击生成一大四小黄星星
     document.addEventListener('click', function(e) {
         createExplosion(e.clientX, e.clientY);
     });
 
     function createExplosion(x, y) {
-        // 1. 创建中心大星星
         const bigStar = document.createElement('div');
         bigStar.className = 'explosion-particle star-big';
-        bigStar.style.left = (x - 20) + 'px'; // 居中定位
+        bigStar.style.left = (x - 20) + 'px';
         bigStar.style.top = (y - 20) + 'px';
         document.body.appendChild(bigStar);
         setTimeout(() => bigStar.remove(), 800);
 
-        // 2. 创建四个小星星 (四角散开)
         const offsets = [
-            { dx: -40, dy: -40 }, // 左上
-            { dx: 40, dy: -40 },  // 右上
-            { dx: -40, dy: 40 },  // 左下
-            { dx: 40, dy: 40 }    // 右下
+            { dx: -40, dy: -40 }, { dx: 40, dy: -40 },
+            { dx: -40, dy: 40 },  { dx: 40, dy: 40 }
         ];
 
         offsets.forEach(offset => {
             const smallStar = document.createElement('div');
             smallStar.className = 'explosion-particle star-small';
-            // 计算位置并减去自身半径以居中
-            smallStar.style.left = (x + offset.dx - 7.5) + 'px'; 
+            smallStar.style.left = (x + offset.dx - 7.5) + 'px';
             smallStar.style.top = (y + offset.dy - 7.5) + 'px';
-            
-            // 给小星星加一点随机旋转，看起来更自然
             smallStar.style.transform = `rotate(${Math.random() * 360}deg)`;
-            
             document.body.appendChild(smallStar);
             setTimeout(() => smallStar.remove(), 800);
         });
     }
+
+    // 2. 加入按钮的交互逻辑
+    document.getElementById('joinBtn').addEventListener('click', function(e) {
+        // 阻止星星特效在点击按钮时触发
+        e.stopPropagation(); 
+        
+        // 弹出古风提示语（联系方式暂留空，用暗号代替）
+        alert("同好留步！\n\n若愿共襄盛举，请循江湖暗号联络吾辈。\n\n（联系方式筹备中，敬请期待）");
+    });
 </script>
 
 </body>
