@@ -30,237 +30,172 @@
             z-index: 10;
         }
 
-        /* --- 标题特效 --- */
-        h1.glitch-title {
+        h1 {
             font-size: 3rem;
             text-align: center;
             margin-bottom: 10px;
-            position: relative;
-            color: #fff;
-            text-shadow: 2px 2px #ff00c1, -2px -2px #00fff9;
-            letter-spacing: 4px;
-        }
-        
-        .subtitle {
-            text-align: center;
-            color: #00ff41;
-            font-size: 1.2rem;
-            margin-bottom: 40px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        /* --- 内容卡片 --- */
-        .section-card {
-            background: rgba(20, 20, 20, 0.9);
-            border-left: 4px solid #00ff41;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
-            transition: transform 0.2s;
-        }
-        
-        .section-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+            color: #ff4d4d;
+            text-shadow: 2px 2px 0px #fff, -2px -2px 0px #00ff00;
+            letter-spacing: 2px;
         }
 
         h2 {
-            color: #ff79c6;
-            margin-top: 0;
+            font-size: 1.5rem;
+            text-align: center;
+            color: #00ff00;
+            margin-bottom: 40px;
+            font-weight: normal;
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        strong {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        /* --- 核心板块样式 --- */
+        .section-title {
+            font-size: 1.8rem;
+            color: #ff9966;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            border-left: 5px solid #00ff00;
+            padding-left: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        p { margin-bottom: 15px; font-size: 1.05rem; }
-        
-        strong { color: #fff; font-weight: bold; }
-
-        /* --- 痛点列表 --- */
-        .pain-point {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            margin-top: 15px;
-            border-radius: 4px;
+        .card {
+            background: rgba(20, 20, 20, 0.8);
             border: 1px solid #333;
-        }
-
-        /* --- 进化路线图 --- */
-        .roadmap-item {
+            padding: 20px;
             margin-bottom: 20px;
-            position: relative;
-            padding-left: 20px;
-            border-left: 2px dashed #444;
-        }
-        .roadmap-item:last-child { border-left: none; }
-        .phase-tag {
-            color: #00fff9;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
+            border-radius: 4px;
+            transition: transform 0.2s;
         }
 
-        /* --- 按钮 --- */
-        .cta-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background: transparent;
-            border: 2px solid #ff00c1;
-            color: #ff00c1;
-            font-family: inherit;
+        .card:hover {
+            transform: translateX(5px);
+            border-color: #ff9966;
+        }
+
+        .card-title {
             font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            margin-top: 40px;
-            transition: all 0.3s;
-            text-transform: uppercase;
-        }
-        .cta-btn:hover {
-            background: #ff00c1;
-            color: #000;
-            box-shadow: 0 0 20px #ff00c1;
+            color: #fff;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* --- 核心特效：星星容器 --- */
-        .star-container {
+        /* --- 爆炸特效 CSS --- */
+        .explosion-particle {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none; /* 确保不挡住点击事件 */
+            pointer-events: none;
             z-index: 9999;
+            animation: explode-fade 0.8s ease-out forwards;
         }
 
-        /* 单个星星的基础样式 */
-        .star-shape {
-            position: absolute;
-            background: #fff;
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            opacity: 0;
-            animation: explode 0.8s ease-out forwards;
-        }
-
-        /* 大星星特有样式 */
-        .star-big {
-            width: 30px;
-            height: 30px;
-            background: #ffd700; /* 金色 */
-            box-shadow: 0 0 10px #ffd700;
-            z-index: 10001;
-        }
-
-        /* 小星星特有样式 */
-        .star-small {
-            width: 12px;
-            height: 12px;
-            background: #00fff9; /* 青色 */
-            z-index: 10000;
-        }
-
-        @keyframes explode {
+        @keyframes explode-fade {
             0% { transform: scale(0) rotate(0deg); opacity: 1; }
             50% { opacity: 1; }
             100% { transform: scale(1.5) rotate(180deg); opacity: 0; }
+        }
+
+        /* 大星星样式 */
+        .star-big {
+            width: 40px;
+            height: 40px;
+            background-color: #FFD700; /* 金黄色 */
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            filter: drop-shadow(0 0 10px #FFD700);
+        }
+
+        /* 小星星样式 - 已改为黄色 */
+        .star-small {
+            width: 15px;
+            height: 15px;
+            background-color: #FFFF00; /* 亮黄色 */
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            filter: drop-shadow(0 0 5px #FFFF00);
         }
     </style>
 </head>
 <body>
 
-    <!-- 特效层 -->
-    <div class="star-container" id="starContainer"></div>
+<div class="container">
+    <h1>枫树纸飞机</h1>
+    <h2>【重塑折叠的艺术】</h2>
 
-    <div class="container">
-        <h1 class="glitch-title">枫树纸飞机</h1>
-        <div class="subtitle">【重塑折叠的艺术】</div>
+    <p>我们不只是社区，更是纸飞机爱好者的<b>数字基地</b>。<br>
+    在这里，我们将<b>硬核竞技</b>、<b>系统化知识图谱</b>与<b>深度社交网络</b>完美融合，让每一次投掷都拥有回响。</p>
 
-        <div class="section-card">
-            <p><strong>我们不只是社区，更是纸飞机爱好者的数字基地。</strong></p>
-            <p>在这里，我们将硬核竞技、系统化知识图谱与深度社交网络完美融合，让每一次投掷都拥有回响。</p>
-        </div>
+    <div class="section-title">⚡ 击碎行业壁垒</div>
+    <p>告别短视频时代的浮躁与碎片化，我们直面三大核心痛点，重建秩序：</p>
 
-        <div class="section-card">
-            <h2>⚡ 击碎行业壁垒</h2>
-            <p>告别短视频时代的浮躁与碎片化，我们直面三大核心痛点，重建秩序：</p>
-            
-            <div class="pain-point">
-                ⚖️ <strong>竞技失衡：</strong>拒绝“特种纸”碾压“普通纸”。我们要建立分级赛事体系，让技术回归本质，新手亦有出头之日。
-            </div>
-            <div class="pain-point">
-                🤝 <strong>社交孤岛：</strong>打破单打独斗的沉默。通过战队系统与归属认证，连接每一位孤独的飞手。
-            </div>
-            <div class="pain-point">
-                📚 <strong>知识断层：</strong>终结教程散落的混乱。打造实测验证机制与结构化Wiki，让经验成为可传承的数据。
-            </div>
-        </div>
-
-        <div class="section-card">
-            <h2>🚀 三阶进化论</h2>
-            <div class="roadmap-item">
-                <span class="phase-tag">Phase 1 · 基石构建</span>
-                上线用户中枢与机型图鉴，确立标准组/无限制组双轨赛制，奠定公平竞技底座。
-            </div>
-            <div class="roadmap-item">
-                <span class="phase-tag">Phase 2 · 生态繁荣</span>
-                解锁战队荣耀系统与成就勋章，搭建结构化教程Wiki，激活社区内生动力。
-            </div>
-            <div class="roadmap-item">
-                <span class="phase-tag">Phase 3 · 全球链接</span>
-                实现多语言无缝切换，开启全球排行榜，让中国折法与世界对话。
-            </div>
-        </div>
-
-        <a href="#" class="cta-btn">加入开发者计划 >></a>
+    <div class="card">
+        <div class="card-title">⚖️ 竞技失衡：拒绝“特种纸”碾压“普通纸”。</div>
+        <p>我们要建立分级赛事体系，让技术回归本质，新手亦有出头之日。</p>
     </div>
 
-    <script>
-        // 核心交互逻辑：点击生成“一大四小”星星
-        document.addEventListener('click', function(e) {
-            createStarExplosion(e.clientX, e.clientY);
-        });
+    <div class="card">
+        <div class="card-title">📉 传承断层：拒绝“野路子”失传。</div>
+        <p>建立数字化折纸图谱，将老法师的经验转化为可检索的代码。</p>
+    </div>
 
-        function createStarExplosion(x, y) {
-            const container = document.getElementById('starContainer');
+    <div class="card">
+        <div class="card-title">🤝 社交孤岛：拒绝“单机游戏”。</div>
+        <p>连接全球飞友，从线上约战到线下集会，让热爱不再孤单。</p>
+    </div>
+</div>
+
+<script>
+    // --- 点击爆炸特效逻辑 (一大四小) ---
+    document.addEventListener('click', function(e) {
+        createExplosion(e.clientX, e.clientY);
+    });
+
+    function createExplosion(x, y) {
+        // 1. 创建中心大星星
+        const bigStar = document.createElement('div');
+        bigStar.className = 'explosion-particle star-big';
+        bigStar.style.left = (x - 20) + 'px'; // 居中定位
+        bigStar.style.top = (y - 20) + 'px';
+        document.body.appendChild(bigStar);
+
+        // 动画结束后移除元素
+        setTimeout(() => bigStar.remove(), 800);
+
+        // 2. 创建四个小星星 (上下左右散开)
+        const offsets = [
+            { dx: -40, dy: -40 }, // 左上
+            { dx: 40, dy: -40 },  // 右上
+            { dx: -40, dy: 40 },  // 左下
+            { dx: 40, dy: 40 }    // 右下
+        ];
+
+        offsets.forEach(offset => {
+            const smallStar = document.createElement('div');
+            smallStar.className = 'explosion-particle star-small';
+            // 计算位置并减去自身半径以居中
+            smallStar.style.left = (x + offset.dx - 7.5) + 'px'; 
+            smallStar.style.top = (y + offset.dy - 7.5) + 'px';
             
-            // 1. 创建中间的大星星
-            const bigStar = document.createElement('div');
-            bigStar.className = 'star-shape star-big';
-            bigStar.style.left = (x - 15) + 'px'; // 居中定位
-            bigStar.style.top = (y - 15) + 'px';
-            container.appendChild(bigStar);
+            // 给小星星加一点随机旋转，看起来更自然
+            const randomRotate = Math.random() * 360;
+            smallStar.style.transform = `rotate(${randomRotate}deg)`;
+            
+            document.body.appendChild(smallStar);
+            setTimeout(() => smallStar.remove(), 800);
+        });
+    }
+</script>
 
-            // 2. 创建周围的四个小星星
-            // 定义四个方向：上、下、左、右 (也可以改成斜向)
-            const directions = [
-                { dx: 0, dy: -40 },   // 上
-                { dx: 0, dy: 40 },    // 下
-                { dx: -40, dy: 0 },   // 左
-                { dx: 40, dy: 0 }     // 右
-            ];
-
-            directions.forEach(dir => {
-                const smallStar = document.createElement('div');
-                smallStar.className = 'star-shape star-small';
-                // 计算小星星的位置
-                smallStar.style.left = (x + dir.dx - 6) + 'px'; 
-                smallStar.style.top = (y + dir.dy - 6) + 'px';
-                
-                // 给每个小星星加一点随机旋转，看起来更自然
-                const randomRotate = Math.random() * 360;
-                smallStar.style.transform = `rotate(${randomRotate}deg)`;
-                
-                container.appendChild(smallStar);
-            });
-
-            // 3. 动画结束后清理DOM，防止页面卡顿
-            setTimeout(() => {
-                bigStar.remove();
-                const smallStars = container.querySelectorAll('.star-small');
-                smallStars.forEach(s => s.remove());
-            }, 800); // 对应CSS动画时长
-        }
-    </script>
 </body>
 </html>
