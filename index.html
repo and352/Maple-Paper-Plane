@@ -9,57 +9,58 @@
         body.dark { --bg:#0f0805; --paper:#2c241b; --txt:#d4af37; --acc:#ff4500; }
         *{margin:0;padding:0;box-sizing:border-box;transition:all .5s;}
         body{background:var(--bg);min-height:100vh;overflow-x:auto;font-family:'KaiTi',serif;cursor:crosshair;}
-        
         .scroll{display:flex;min-height:100vh;padding:60px 20px 40px;}
         .rod{width:30px;background:linear-gradient(90deg,#2a1610,#5d3a28,#8b5a3c,#5d3a28,#2a1610);box-shadow:inset 0 0 10px rgba(0,0,0,.8);flex-shrink:0;}
         .paper{flex:1;background:var(--paper);padding:40px;box-shadow:0 0 30px rgba(0,0,0,.3);writing-mode:vertical-rl;text-orientation:upright;letter-spacing:.2em;line-height:2.2;overflow-x:auto;display:flex;align-items:flex-start;gap:30px;}
         h1{font-size:2.8rem;color:var(--txt);white-space:nowrap;}
         .col{font-size:1.2rem;color:var(--txt);white-space:pre-wrap;max-height:80vh;}
-        
         body.en .paper{writing-mode:horizontal-tb;flex-direction:column;overflow-y:auto;overflow-x:hidden;gap:20px;}
         body.en h1{margin-bottom:20px;border-bottom:2px solid var(--acc);padding-bottom:10px;}
         body.en .col{font-family:Georgia,serif;max-height:none;line-height:1.8;}
-
         .top{position:fixed;top:20px;left:20px;right:20px;display:flex;justify-content:space-between;z-index:100;pointer-events:none;}
         .btn{pointer-events:auto;background:rgba(0,0,0,.6);color:#fff;border:1px solid #d4af37;padding:8px 15px;border-radius:20px;cursor:pointer;font-size:14px;backdrop-filter:blur(5px);}
         .lang{position:fixed;top:20px;right:80px;z-index:100;width:40px;height:40px;border-radius:50%;background:var(--acc);color:#fff;border:2px solid #fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:bold;font-size:12px;}
         .mil{position:fixed;bottom:20px;left:20px;z-index:100;background:rgba(0,0,0,.6);color:#d4af37;padding:8px 15px;border-radius:20px;border:1px solid #d4af37;font-weight:bold;font-size:14px;}
-
         .act{writing-mode:horizontal-tb;border:3px double var(--acc);color:var(--acc);padding:15px 10px;font-size:1.2rem;font-weight:bold;cursor:pointer;background:transparent;transition:.3s;white-space:nowrap;align-self:center;}
         .act:hover{background:var(--acc);color:#fff;}
-        
-        /* 计时器模块 */
-        .timer-box{writing-mode:horizontal-tb;display:flex;flex-direction:column;align-items:center;gap:10px;align-self:center;}
+        .timer-box,.ms-box{writing-mode:horizontal-tb;display:flex;flex-direction:column;align-items:center;gap:10px;align-self:center;}
         .timer-display{font-size:2.5rem;font-weight:bold;color:var(--acc);font-family:monospace;letter-spacing:2px;}
         .best-record{font-size:1rem;color:var(--txt);opacity:0.8;}
         .timer-btns{display:flex;gap:10px;}
         .t-btn{padding:8px 15px;border:2px solid var(--acc);color:var(--acc);background:transparent;cursor:pointer;font-weight:bold;font-size:1rem;transition:.3s;}
         .t-btn:hover{background:var(--acc);color:#fff;}
-
-        /* 毫秒计时器 */
-        .ms-box{writing-mode:horizontal-tb;display:flex;flex-direction:column;align-items:center;gap:10px;align-self:center;border:2px dashed var(--txt);padding:20px;border-radius:10px;}
+        .ms-box{border:2px dashed var(--txt);padding:20px;border-radius:10px;}
         .ms-display{font-size:2rem;font-weight:bold;color:var(--txt);font-family:monospace;}
         .ms-label{font-size:0.9rem;opacity:0.7;}
-
         .gb{writing-mode:horizontal-tb;border-left:2px dashed var(--txt);padding-left:20px;margin-left:20px;min-width:200px;}
         body.en .gb{border-left:none;border-top:2px dashed var(--txt);padding-left:0;padding-top:20px;margin-left:0;}
         .gb h3{font-size:1.2rem;margin-bottom:10px;}
         .gb p{font-size:1rem;color:var(--acc);font-style:italic;}
-        
         .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);display:none;justify-content:center;align-items:center;z-index:1000;}
-        .modal-c{background:var(--paper);padding:40px;border:4px double var(--acc);text-align:center;max-width:80%;position:relative;}
+        .modal-c{background:var(--paper);padding:40px;border:4px double var(--acc);text-align:center;max-width:80%;position:relative;max-height:80vh;overflow-y:auto;}
         .close{position:absolute;top:10px;right:10px;cursor:pointer;font-size:24px;color:var(--acc);}
         .badge{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:radial-gradient(circle,#f4e4bc 30%,#d4af37 100%);padding:40px;border-radius:50%;color:#8b0000;text-align:center;box-shadow:0 0 60px rgba(212,175,55,.8);border:4px solid #8b0000;z-index:2000;transition:.6s cubic-bezier(.175,.885,.32,1.275);}
         .badge.show{transform:translate(-50%,-50%) scale(1);}
         .star{position:fixed;pointer-events:none;z-index:9999;animation:fade 1s forwards;}
         @keyframes fade{0%{transform:scale(0) rotate(0deg);opacity:1;}100%{transform:scale(1.5) rotate(180deg);opacity:0;}}
+        .sub-modal .modal-c{width:600px;max-width:90%;padding:20px;}
+        .sub-header{display:flex;gap:10px;margin-bottom:15px;border-bottom:1px dashed var(--txt);padding-bottom:10px;}
+        .sub-header input{flex:1;padding:8px;border:1px solid var(--txt);background:transparent;color:var(--txt);outline:none;font-family:'KaiTi',serif;}
+        .sub-header button{padding:8px 15px;background:var(--acc);color:#fff;border:none;cursor:pointer;font-family:'KaiTi',serif;}
+        .list-box{display:flex;flex-direction:column;gap:15px;max-height:400px;overflow-y:auto;padding-right:10px;text-align:left;}
+        .list-item{border-bottom:1px dashed rgba(0,0,0,0.2);padding-bottom:10px;}
+        .list-user{font-weight:bold;color:var(--acc);margin-bottom:5px;}
+        .list-text{font-size:14px;color:var(--txt);}
+        .list-time{font-size:12px;opacity:0.6;margin-top:5px;}
+        .profile-card{border:2px solid var(--txt);padding:20px;margin-bottom:20px;text-align:center;}
+        .profile-card h2{color:var(--acc);margin-bottom:10px;}
+        .profile-stats{display:flex;justify-content:space-around;margin-top:15px;font-size:14px;}
     </style>
 </head>
 <body>
     <div class="top"><button class="btn" onclick="document.body.classList.toggle('dark')">🏮 挑灯/熄灯</button></div>
     <div class="mil">✈️ 飞行里程: <span id="mil">0</span> 里</div>
     <div class="lang" onclick="toggleLang()">文/EN</div>
-
     <div class="scroll">
         <div class="rod"></div>
         <div class="paper" id="paper">
@@ -83,8 +84,6 @@
 终阶出海：启多语切换，登全球排行榜。
 
 若同此念，诚邀入局，共襄盛举。</div>
-            
-            <!-- 普通计时器 + 最高滞空 -->
             <div class="timer-box">
                 <div class="timer-display" id="timer">00:00:00</div>
                 <div class="best-record" id="best">最高滞空: 00:00:00</div>
@@ -93,8 +92,6 @@
                     <button class="t-btn" onclick="resetTimer()">重置</button>
                 </div>
             </div>
-
-            <!-- 毫秒级计时器 -->
             <div class="ms-box">
                 <div class="ms-label" id="msLabel">毫秒级计时</div>
                 <div class="ms-display" id="msTimer">00.00</div>
@@ -103,10 +100,10 @@
                     <button class="t-btn" onclick="resetMsTimer()">重置</button>
                 </div>
             </div>
-
             <div class="act" onclick="openModal()" id="jb">加入我们</div>
             <div class="act" onclick="drawFortune()" id="ft">求签</div>
-
+            <div class="act" onclick="openMoments()" id="mb">朋友圈</div>
+            <div class="act" onclick="openProfile()" id="pf">个人主页</div>
             <div class="gb">
                 <h3 id="gbt">📜 云端投递</h3>
                 <p id="gbn">此间暂不开放，敬请期待...</p>
@@ -114,7 +111,6 @@
         </div>
         <div class="rod"></div>
     </div>
-
     <div class="modal" id="modal">
         <div class="modal-c">
             <span class="close" onclick="closeModal()">&times;</span>
@@ -122,13 +118,47 @@
             <p id="mtxt" style="font-size:18px;line-height:1.8;">群聊暂未开启，请稍候片刻。<br>飞鸽传书正在路上...</p>
         </div>
     </div>
-    <div class="badge" id="badge"><div style="font-size:50px;filter:drop-shadow(0 0 5px gold);">✈️</div><div style="font-weight:bold;font-size:24px;margin-top:10px;">凌云之志</div><div style="font-size:14px;margin-top:5px;">飞行里程破百</div></div>
+    <div class="modal sub-modal" id="momentsModal">
+        <div class="modal-c">
+            <span class="close" onclick="closeMoments()">&times;</span>
+            <h3 style="color:var(--acc);margin-bottom:15px;" id="momTitle">朋友圈</h3>
+            <div class="sub-header">
+                <input type="text" id="searchInput" placeholder="搜名字加好友...">
+                <button onclick="searchFriend()" id="searchBtn">搜索</button>
+            </div>
+            <div class="sub-header">
+                <input type="text" id="postInput" placeholder="分享你的飞行心得...">
+                <button onclick="postMoment()" id="postBtn">发布</button>
+            </div>
+            <div class="list-box" id="momentsList"></div>
+        </div>
+    </div>
+    <div class="modal sub-modal" id="profileModal">
+        <div class="modal-c">
+            <span class="close" onclick="closeProfile()">&times;</span>
+            <h3 style="color:var(--acc);margin-bottom:15px;" id="profTitle">个人主页</h3>
+            <div class="profile-card">
+                <h2 id="myName">无名侠客</h2>
+                <p id="mySign" onclick="changeSign()" style="cursor:pointer;opacity:0.8;">点击修改个性签名</p>
+                <div class="profile-stats">
+                    <span id="statMil">飞行里程: 0 里</span>
+                    <span id="statBest">最高滞空: 00:00:00</span>
+                </div>
+            </div>
+            <h4 style="margin-bottom:10px;text-align:left;" id="friendTitle">江湖好友</h4>
+            <div class="list-box" id="friendsList"></div>
+        </div>
+    </div>
+    <div class="badge" id="badge">
+        <div style="font-size:50px;filter:drop-shadow(0 0 5px gold);">✈️</div>
+        <div style="font-weight:bold;font-size:24px;margin-top:10px;">凌云之志</div>
+        <div style="font-size:14px;margin-top:5px;">飞行里程破百</div>
+    </div>
 
 <script>
-// 1. 双语数据
 const D={
-zh:{t:"枫树纸飞机",c:`【愿景】\n筑一方净土，聚四海同好。\n融公平竞技、系统教程与深度社交于一体，\n只为纸飞机爱好者，寻一处归心之所。\n\n【破局】\n叹当今短视频江湖，虽喧嚣繁华，却重浮华而轻沉淀。\n吾辈立志，破除三座大山：\n一曰不公：凡纸与特种纸混战，致使新锐难立；\n二曰孤岛：少战队归属，致使高手孤身奋战；\n三曰碎片：良法散落，缺系统实测之明鉴。\n\n【规划】\n建内外双通之台，令天下飞手皆有所归。\n初阶筑基：立用户图鉴，定分级赛制；\n次阶聚势：建战队勋章，成结构化百科；\n终阶出海：启多语切换，登全球排行榜。\n\n若同此念，诚邀入局，共襄盛举。`,jb:"加入我们",ft:"求签",gbt:"📜 云端投递",gbn:"此间暂不开放，敬请期待...",mt:"江湖传书",mtxt:"群聊暂未开启，请稍候片刻。\n飞鸽传书正在路上...",msLabel:"毫秒级计时"},
-en:{t:"Maple Paper Plane",c:`[Vision]\nBuilding a sanctuary for enthusiasts worldwide.\nIntegrating fair competition, systematic tutorials, and deep social interaction.\n\n[The Problem]\nShort-video platforms are bustling but prioritize fleeting entertainment over substance. We solve three issues:\n1. Unfairness: Standard and specialty papers compete together.\n2. Isolation: Players lack team systems and belonging.\n3. Fragmentation: Tutorials are scattered without verification.\n\n[Roadmap]\nPhase 1: User database, model gallery, tiered tournaments.\nPhase 2: Clan system, achievement badges, structured Wiki.\nPhase 3: Multi-language support, global leaderboards.\n\nJoin us if you share this vision.`,jb:"Join Us",ft:"Fortune",gbt:"📜 Cloud Guestbook",gbn:"Currently closed. Stay tuned...",mt:"Message from Jianghu",mtxt:"The group chat is not open yet, please wait.\nThe carrier pigeon is on its way...",msLabel:"Millisecond Timer"}
+zh:{t:"枫树纸飞机",c:`【愿景】\n筑一方净土，聚四海同好。\n融公平竞技、系统教程与深度社交于一体，\n只为纸飞机爱好者，寻一处归心之所。\n\n【破局】\n叹当今短视频江湖，虽喧嚣繁华，却重浮华而轻沉淀。\n吾辈立志，破除三座大山：\n一曰不公：凡纸与特种纸混战，致使新锐难立；\n二曰孤岛：少战队归属，致使高手孤身奋战；\n三曰碎片：良法散落，缺系统实测之明鉴。\n\n【规划】\n建内外双通之台，令天下飞手皆有所归。\n初阶筑基：立用户图鉴，定分级赛制；\n次阶聚势：建战队勋章，成结构化百科；\n终阶出海：启多语切换，登全球排行榜。\n\n若同此念，诚邀入局，共襄盛举。`,jb:"加入我们",ft:"求签",gbt:"📜 云端投递",gbn:"此间暂不开放，敬请期待...",mt:"江湖传书",mtxt:"群聊暂未开启，请稍候片刻。\n飞鸽传书正在路上...",msLabel:"毫秒级计时",mb:"朋友圈",momTitle:"朋友圈",searchPh:"搜名字加好友...",searchBtn:"搜索",postPh:"分享你的飞行心得...",postBtn:"发布",pf:"个人主页",profTitle:"个人主页",friendTitle:"江湖好友"},
+en:{t:"Maple Paper Plane",c:`[Vision]\nBuilding a sanctuary for enthusiasts worldwide.\nIntegrating fair competition, systematic tutorials, and deep social interaction.\n\n[The Problem]\nShort-video platforms are bustling but prioritize fleeting entertainment over substance. We solve three issues:\n1. Unfairness: Standard and specialty papers compete together.\n2. Isolation: Players lack team systems and belonging.\n3. Fragmentation: Tutorials are scattered without verification.\n\n[Roadmap]\nPhase 1: User database, model gallery, tiered tournaments.\nPhase 2: Clan system, achievement badges, structured Wiki.\nPhase 3: Multi-language support, global leaderboards.\n\nJoin us if you share this vision.`,jb:"Join Us",ft:"Fortune",gbt:"📜 Cloud Guestbook",gbn:"Currently closed. Stay tuned...",mt:"Message from Jianghu",mtxt:"The group chat is not open yet, please wait.\nThe carrier pigeon is on its way...",msLabel:"Millisecond Timer",mb:"Moments",momTitle:"Moments",searchPh:"Search name to add friend...",searchBtn:"Search",postPh:"Share your flight experience...",postBtn:"Post",pf:"Profile",profTitle:"Profile",friendTitle:"Friends"}
 };
 let lang='zh';
 function toggleLang(){
@@ -144,12 +174,21 @@ function toggleLang(){
     document.getElementById('mt').innerText=d.mt;
     document.getElementById('mtxt').innerText=d.mtxt;
     document.getElementById('msLabel').innerText=d.msLabel;
+    document.getElementById('mb').innerText=d.mb;
+    document.getElementById('momTitle').innerText=d.momTitle;
+    document.getElementById('searchInput').placeholder=d.searchPh;
+    document.getElementById('searchBtn').innerText=d.searchBtn;
+    document.getElementById('postInput').placeholder=d.postPh;
+    document.getElementById('postBtn').innerText=d.postBtn;
+    document.getElementById('pf').innerText=d.pf;
+    document.getElementById('profTitle').innerText=d.profTitle;
+    document.getElementById('friendTitle').innerText=d.friendTitle;
 }
 
-// 2. 普通计时器 + 最高滞空 + 里程
 let mil=parseInt(localStorage.getItem('maple_mil'))||0;
 let best=parseInt(localStorage.getItem('maple_best'))||0;
 let timerInt=null, seconds=0, running=false;
+let badgeShown = localStorage.getItem('maple_badge_shown') === 'true';
 document.getElementById('mil').innerText=mil;
 updateBestDisplay();
 
@@ -179,52 +218,8 @@ function addMileage(n){
     mil+=n;
     document.getElementById('mil').innerText=mil;
     localStorage.setItem('maple_mil',mil);
-    if(mil>=100&&!document.getElementById('badge').classList.contains('show')){
+    if(mil>=100 && !badgeShown){
+        badgeShown = true;
+        localStorage.setItem('maple_badge_shown', 'true');
         document.getElementById('badge').classList.add('show');
-        setTimeout(()=>document.getElementById('badge').classList.remove('show'),3000);
-    }
-}
-
-// 3. 毫秒级计时器 (不参与里程)
-let msInt=null, ms=0, msRunning=false;
-function updateMsDisplay(){
-    const s=String(Math.floor(ms/100)).padStart(2,'0');
-    const cs=String(ms%100).padStart(2,'0');
-    document.getElementById('msTimer').innerText=`${s}.${cs}`;
-}
-function toggleMsTimer(){
-    if(msRunning){clearInterval(msInt);document.getElementById('msStartBtn').innerText="起";}
-    else{msInt=setInterval(()=>{ms++;updateMsDisplay();},10);document.getElementById('msStartBtn').innerText="停";}
-    msRunning=!msRunning;
-}
-function resetMsTimer(){clearInterval(msInt);msRunning=false;ms=0;updateMsDisplay();document.getElementById('msStartBtn').innerText="起";}
-
-// 4. 求签与弹窗
-const poems=["素纸轻折寄长风，枫林深处觅归鸿。","指尖翻飞化神翼，不负韶华不负空。","莫道凡纸无傲骨，借得长风上九霄。","千回百转匠心在，一掷凌云万里遥。","聚散随缘皆过客，唯留纸翼记平生。"];
-function openModal(){document.getElementById('modal').style.display='flex';}
-function closeModal(){document.getElementById('modal').style.display='none';}
-function drawFortune(){
-    let msg;
-    if(Math.random()<=0.2){
-        const p=poems[Math.floor(Math.random()*poems.length)];
-        msg=lang=='zh'?`【上上签】\n${p}\n\n此乃吉兆，愿君乘风破浪！`:`[Great Blessing]\n${p}\n\nAn auspicious sign! Ride the wind!`;
-    }else{msg=lang=='zh'?"【平签】\n风平浪静，宜静候佳音。":"[Ordinary Sign]\nCalm winds. Wait for good news.";}
-    document.getElementById('mt').innerText=lang=='zh'?"枫林求签":"Maple Fortune";
-    document.getElementById('mtxt').innerText=msg;
-    openModal();
-}
-
-// 5. 星星特效
-document.addEventListener('click',e=>{
-    if(e.target.closest('.act')||e.target.closest('.t-btn')||e.target.closest('.btn')||e.target.closest('.lang')||e.target.closest('.modal-c'))return;
-    createStar(e.clientX,e.clientY,true);
-    for(let i=0;i<4;i++){setTimeout(()=>{createStar(e.clientX+(Math.random()-.5)*80,e.clientY+(Math.random()-.5)*80,false);},i*50);}
-});
-function createStar(x,y,big){
-    const s=document.createElement('div');s.innerHTML='★';s.className='star';
-    s.style.cssText=`left:${x}px;top:${y}px;font-size:${big?'40px':'20px'};color:#FFD700;transform:translate(-50%,-50%);`;
-    document.body.appendChild(s);setTimeout(()=>s.remove(),1000);
-}
-</script>
-</body>
-</html>
+        setTimeout(()=>document.getElementById('badge').classList.remove
