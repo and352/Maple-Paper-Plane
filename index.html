@@ -3,266 +3,256 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>枫叶纸飞机 - 赛博朋克社区</title>
+    <title>枫树纸飞机 - 赛博朋克社区</title>
     <base href="/Maple-Paper-Plane/">
     <style>
-        /* 1. 赛博朋克纯黑背景与全局样式 */
+        /* 1. 全局设置 */
         body {
             margin: 0;
             padding: 0;
-            background-color: #050505; /* 纯黑底色 */
-            color: #00FFFF; /* 赛博朋克标志性的青蓝色文字 */
-            font-family: 'Courier New', Courier, monospace; /* 科技感等宽字体 */
-            overflow-x: hidden; /* 防止横向滚动 */
+            background-color: #050505;
+            color: #e0e0e0;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: hidden;
             line-height: 1.6;
-            cursor: crosshair; /* 把鼠标变成十字准星 */
+            cursor: crosshair;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            /* 赛博朋克动态外边框 */
+            border: 4px solid transparent;
+            border-image: linear-gradient(45deg, #FFD700, #00FFFF, #FF00FF, #FFFFFF) 1;
+            animation: borderFlow 3s linear infinite;
+            box-sizing: border-box;
         }
 
-        /* 2. 动态枫叶飘落效果 */
-        .cyber-leaf {
+        @keyframes borderFlow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        /* 2. 内容容器 */
+        .container {
+            max-width: 800px;
+            padding: 40px;
+            text-align: center;
+            z-index: 10;
+            position: relative;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        h1 {
+            color: #FFD700;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #FFD700;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: left;
+            font-size: 1.1em;
+            color: #cccccc;
+        }
+
+        .highlight {
+            color: #00FFFF;
+            font-weight: bold;
+        }
+
+        /* 3. 纸飞机动画 */
+        .paper-plane {
+            position: fixed;
+            top: 20%;
+            left: -100px;
+            width: 50px;
+            height: 50px;
+            background: white;
+            clip-path: polygon(0 0, 100% 50%, 0 100%, 20% 50%);
+            box-shadow: 0 0 15px #fff;
+            animation: flyRight 8s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes flyRight {
+            0% { left: -100px; transform: translateY(0) rotate(15deg); }
+            25% { transform: translateY(-20px) rotate(10deg); }
+            50% { transform: translateY(0) rotate(15deg); }
+            75% { transform: translateY(20px) rotate(20deg); }
+            100% { left: 110%; transform: translateY(0) rotate(15deg); }
+        }
+
+        /* 4. 枫叶样式 (黄金+白色) */
+        .leaf {
             position: fixed;
             top: -50px;
-            width: 20px;
-            height: 20px;
-            background-color: #FF00FF; /* 霓虹紫红色枫叶 */
-            box-shadow: 0 0 10px #FF00FF, 0 0 20px #FF00FF; /* 霓虹发光效果 */
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); /* 菱形叶子形状 */
+            width: 30px;
+            height: 30px;
+            /* 使用 SVG 绘制真实的枫叶形状 */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD700'%3E%3Cpath d='M12 2L14.5 9H22L16 13.5L18.5 21L12 16.5L5.5 21L8 13.5L2 9H9.5L12 2Z'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
             opacity: 0.8;
-            z-index: -1; /* 确保在文字下方 */
-            animation: cyber-fall linear infinite;
+            pointer-events: auto; /* 允许点击 */
+            transition: transform 0.2s;
+            cursor: pointer;
+            z-index: 5;
         }
 
-        /* 为每一片叶子设置不同的动画时长、延迟和位置 */
-        .cyber-leaf:nth-child(1) { left: 10%; animation-duration: 6s; animation-delay: 0s; }
-        .cyber-leaf:nth-child(2) { left: 25%; animation-duration: 8s; animation-delay: 2s; background-color: #00FFFF; box-shadow: 0 0 10px #00FFFF; }
-        .cyber-leaf:nth-child(3) { left: 40%; animation-duration: 7s; animation-delay: 1s; }
-        .cyber-leaf:nth-child(4) { left: 55%; animation-duration: 9s; animation-delay: 3s; background-color: #00FF00; box-shadow: 0 0 10px #00FF00; }
-        .cyber-leaf:nth-child(5) { left: 70%; animation-duration: 6.5s; animation-delay: 0.5s; }
-        .cyber-leaf:nth-child(6) { left: 85%; animation-duration: 8.5s; animation-delay: 1.5s; background-color: #00FFFF; box-shadow: 0 0 10px #00FFFF; }
-        .cyber-leaf:nth-child(7) { left: 95%; animation-duration: 7.5s; animation-delay: 2.5s; }
-
-        @keyframes cyber-fall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
-            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        /* 被点击后的赛博朋克动态描边效果 */
+        .leaf.active {
+            animation: cyberPulse 1s infinite alternate;
+            filter: drop-shadow(0 0 10px #00FFFF) drop-shadow(0 0 20px #FF00FF);
+            transform: scale(1.5) !important; /* 放大一点表示选中 */
         }
 
-        /* 3. 赛博纸飞机动画 */
-        .cyber-plane {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            background-color: #FFFF00; /* 霓虹黄纸飞机 */
-            box-shadow: 0 0 15px #FFFF00, 0 0 30px #FFFF00;
-            clip-path: polygon(0% 50%, 100% 0%, 70% 50%, 100% 100%); /* 纸飞机形状 */
-            opacity: 0;
-            z-index: 0; /* 在文字下方，但在落叶上方 */
-            animation: fly-across linear infinite;
+        @keyframes cyberPulse {
+            0% { filter: drop-shadow(0 0 5px #00FFFF); }
+            100% { filter: drop-shadow(0 0 20px #FF00FF) brightness(1.5); }
         }
 
-        /* 设置不同飞机的飞行轨迹 */
-        .cyber-plane:nth-child(8) { top: 20%; animation-duration: 4s; animation-delay: 1s; }
-        .cyber-plane:nth-child(9) { top: 50%; animation-duration: 5s; animation-delay: 3s; background-color: #00FFFF; box-shadow: 0 0 15px #00FFFF, 0 0 30px #00FFFF; }
-        .cyber-plane:nth-child(10) { top: 80%; animation-duration: 4.5s; animation-delay: 5s; background-color: #FF00FF; box-shadow: 0 0 15px #FF00FF, 0 0 30px #FF00FF; }
-
-        @keyframes fly-across {
-            0% { left: -50px; opacity: 0; transform: rotate(-10deg); }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { left: 110%; opacity: 0; transform: rotate(10deg); }
+        /* 简单的飘落动画类 */
+        .falling {
+            animation-name: fallDown;
+            animation-timing-function: linear;
+            animation-fill-mode: forwards;
         }
 
-        /* 4. 点击粒子爆炸效果 */
-        .particle {
-            position: fixed;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            pointer-events: none; /* 让粒子不影响鼠标点击 */
-            z-index: 999;
-            animation: explode 0.8s ease-out forwards;
+        @keyframes fallDown {
+            to { transform: translateY(110vh) rotate(360deg); }
         }
 
-        @keyframes explode {
-            0% { transform: translate(0, 0) scale(1); opacity: 1; }
-            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
-        }
-
-        /* 5. 赛博朋克风的文字与排版 */
-        header {
-            padding: 20px 40px;
-            border-bottom: 2px solid #FF00FF;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 10;
-        }
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #FF00FF;
-            text-shadow: 0 0 10px #FF00FF;
-        }
-        .nav-links a {
-            color: #00FFFF;
-            text-decoration: none;
-            margin-left: 20px;
-            font-size: 16px;
-        }
-        .hero {
-            text-align: center;
-            padding: 100px 20px;
-            position: relative;
-            z-index: 10;
-        }
-        .hero h1 {
-            font-size: 48px;
-            color: #FFFFFF;
-            text-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF;
-            margin-bottom: 20px;
-            min-height: 60px; /* 防止打字时高度跳动 */
-        }
-        /* 打字机闪烁光标 */
-        .cursor {
-            display: inline-block;
-            width: 3px;
-            height: 40px;
-            background-color: #00FFFF;
-            margin-left: 5px;
-            vertical-align: middle;
-            animation: blink 0.7s infinite;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        .hero p {
-            font-size: 18px;
-            color: #AAAAAA;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .section {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 0 20px;
-            position: relative;
-            z-index: 10;
-        }
-        .card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid #333;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-        }
-        .card h3 { color: #FF00FF; margin-top: 0; text-shadow: 0 0 5px #FF00FF; }
-        footer {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-            border-top: 1px solid #333;
-            margin-top: 50px;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* 移动端适配 */
-        @media (max-width: 600px) {
-            .hero h1 { font-size: 28px; }
-            .cursor { height: 28px; }
-            header { padding: 15px 20px; flex-direction: column; gap: 10px; }
-            .nav-links a { margin-left: 10px; font-size: 14px; }
-        }
     </style>
 </head>
 <body>
 
-    <!-- 动态枫叶 -->
-    <div class="cyber-leaf"></div>
-    <div class="cyber-leaf"></div>
-    <div class="cyber-leaf"></div>
-    <div class="cyber-leaf"></div>
-    <div class="cyber-leaf"></div>
-    <div class="cyber-leaf"></div>
-    <div class="cyber-leaf"></div>
+    <!-- 纸飞机背景 -->
+    <div class="paper-plane"></div>
 
-    <!-- 赛博纸飞机 -->
-    <div class="cyber-plane"></div>
-    <div class="cyber-plane"></div>
-    <div class="cyber-plane"></div>
+    <!-- 核心内容区域 -->
+    <div class="container">
+        <h1 id="typing-title"></h1>
+        
+        <p><span class="highlight">【愿景】</span>枫树纸飞机致力于构建一个集公平竞技、系统教程与深度社交于一体的纸飞机爱好者社区平台。</p>
+        
+        <p>当前短视频平台上的纸飞机圈子虽流量巨大，但普遍存在重娱乐轻沉淀的问题。为此，本平台旨在解决三大痛点：</p>
+        <ul style="text-align: left; list-style-type: square; color: #aaa;">
+            <li><strong>缺乏公平性：</strong>普通纸与特种纸同台竞技导致新手难以立足；</li>
+            <li><strong>社交孤岛：</strong>玩家缺乏战队体系与归属感，多为单打独斗；</li>
+            <li><strong>知识碎片化：</strong>优质教程散落各处，缺乏系统的实测验证机制。</li>
+        </ul>
 
-    <!-- 网页内容 -->
-    <header>
-        <div class="logo">🍁 枫叶纸飞机</div>
-        <nav class="nav-links">
-            <a href="#vision">愿景</a>
-            <a href="#roadmap">规划</a>
-            <a href="#">参与开发</a>
-        </nav>
-    </header>
+        <p>我们将建立一个兼顾国内外双向流通的平台，让每位玩家都能找到组织。核心功能规划分为三个阶段：</p>
+        <p><span class="highlight">第一阶段：</span>基础建设（用户系统、机型图鉴、分级赛事）。<br>
+           <span class="highlight">第二阶段：</span>社交生态（战队系统、成就勋章、结构化Wiki）。<br>
+           <span class="highlight">第三阶段：</span>国际化（多语言切换、全球排行榜）。</p>
+           
+        <p style="margin-top: 30px; color: #FFD700;">如果你认同这一理念，欢迎参与开发，让我们携手让纸飞机飞得更远。</p>
+    </div>
 
-    <section class="hero">
-        <!-- 注意：这里加了 id="typewriter" 和 span 光标，用于打字机效果 -->
-        <h1 id="typewriter"><span class="cursor"></span></h1>
-        <p>致力于打造一个集公平竞技、系统教程与深度社交于一体的平台。<br>让每一次飞行都有据可依，让每一位玩家都能找到组织。</p>
-    </section>
-
-    <section id="vision" class="section">
-        <div class="card">
-            <h3>⚖️ 拒绝不公平竞技</h3>
-            <p>解决普通纸与特种纸同台竞技的乱象。我们将建立严格的分级赛事系统，让新手也能凭技术立足。</p>
-        </div>
-        <div class="card">
-            <h3>🤝 打破社交孤岛</h3>
-            <p>告别单打独斗。通过战队体系与成就勋章，增强玩家归属感，建立深度的社交连接。</p>
-        </div>
-    </section>
-
-    <footer>
-        <p>© 2026 枫叶纸飞机 Maple Paper Plane Community</p>
-    </footer>
-
-    <!-- 粒子爆炸与打字机 JS 脚本 -->
     <script>
-        // 1. 点击粒子爆炸效果
-        document.addEventListener('click', function(e) {
-            const colors = ['#FF00FF', '#00FFFF', '#FFFF00', '#00FF00'];
-            for (let i = 0; i < 12; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                particle.style.boxShadow = `0 0 10px ${particle.style.backgroundColor}`;
-                particle.style.left = e.clientX + 'px';
-                particle.style.top = e.clientY + 'px';
-                const angle = Math.random() * 2 * Math.PI;
-                const distance = 50 + Math.random() * 50;
-                particle.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
-                particle.style.setProperty('--ty', `${Math.sin(angle) * distance}px`);
-                document.body.appendChild(particle);
-                setTimeout(() => { particle.remove(); }, 800);
-            }
-        });
+        // 1. 打字机效果
+        const titleText = "枫树纸飞机";
+        const titleElement = document.getElementById('typing-title');
+        let charIndex = 0;
 
-        // 2. 打字机效果
-        const text = "构建专业的纸飞机爱好者社区";
-        let index = 0;
-        const typewriterElement = document.getElementById('typewriter');
-        const cursorElement = typewriterElement.querySelector('.cursor');
-
-        function type() {
-            if (index < text.length) {
-                // 在光标前面插入文字
-                typewriterElement.insertBefore(document.createTextNode(text.charAt(index)), cursorElement);
-                index++;
-                setTimeout(type, 150); // 打字速度（毫秒），数字越小打字越快
+        function typeWriter() {
+            if (charIndex < titleText.length) {
+                titleElement.innerHTML += titleText.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 200);
             }
         }
-        
-        // 页面加载后延迟 0.5 秒开始打字
-        setTimeout(type, 500);
-    </script>
+        window.onload = typeWriter;
 
+        // 2. 生成黄金/白色枫叶
+        function createLeaf() {
+            const leaf = document.createElement('div');
+            leaf.classList.add('leaf', 'falling');
+            
+            // 随机位置
+            leaf.style.left = Math.random() * 100 + 'vw';
+            
+            // 随机大小
+            const size = Math.random() * 20 + 20; // 20px - 40px
+            leaf.style.width = size + 'px';
+            leaf.style.height = size + 'px';
+            
+            // 随机颜色 (黄金色或白色)
+            const isGold = Math.random() > 0.3; // 70%概率是金色
+            const color = isGold ? '%23FFD700' : '%23FFFFFF';
+            leaf.style.backgroundImage = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='${color}'%3E%3Cpath d='M12 2L14.5 9H22L16 13.5L18.5 21L12 16.5L5.5 21L8 13.5L2 9H9.5L12 2Z'/%3E%3C/svg%3E")`;
+
+            // 随机下落时间
+            leaf.style.animationDuration = (Math.random() * 5 + 5) + 's';
+
+            // --- 核心功能：点击触发赛博朋克描边 ---
+            leaf.addEventListener('click', function(e) {
+                e.stopPropagation(); // 防止触发背景的点击爆炸
+                
+                // 如果已经激活，就取消激活；如果没有，就激活
+                if(this.classList.contains('active')) {
+                    this.classList.remove('active');
+                } else {
+                    this.classList.add('active');
+                    
+                    // 可选：点击时稍微加速一下下落，增加互动感
+                    this.style.animationDuration = '2s'; 
+                }
+            });
+
+            document.body.appendChild(leaf);
+
+            // 动画结束后移除元素
+            setTimeout(() => {
+                leaf.remove();
+            }, 10000);
+        }
+
+        // 每300毫秒生成一片叶子
+        setInterval(createLeaf, 300);
+
+        // 3. 背景点击粒子爆炸效果 (保留作为背景氛围)
+        document.addEventListener('click', function(e) {
+            // 如果点到了叶子，就不触发背景爆炸，避免视觉混乱
+            if(e.target.classList.contains('leaf')) return;
+
+            createExplosion(e.clientX, e.clientY);
+        });
+
+        function createExplosion(x, y) {
+            const particleCount = 12;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'fixed';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.width = '6px';
+                particle.style.height = '6px';
+                particle.style.backgroundColor = ['#FFD700', '#00FFFF', '#FF00FF'][Math.floor(Math.random() * 3)];
+                particle.style.pointerEvents = 'none';
+                particle.style.borderRadius = '50%';
+                document.body.appendChild(particle);
+
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 100 + 50;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+
+                particle.animate([
+                    { transform: 'translate(0, 0)', opacity: 1 },
+                    { transform: `translate(${tx}px, ${ty}px)`, opacity: 0 }
+                ], {
+                    duration: 800,
+                    easing: 'cubic-bezier(0, .9, .57, 1)'
+                }).onfinish = () => particle.remove();
+            }
+        }
+    </script>
 </body>
 </html>
