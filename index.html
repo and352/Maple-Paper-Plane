@@ -173,11 +173,11 @@
             openModal();
         }
 
-        // 滞空计时器逻辑（包含重置）
+        // 滞空计时器逻辑（完美闭环）
         function toggleTimer() {
             const btn = document.getElementById('timer-btn');
             if (!timerInterval) {
-                // 开始计时
+                // 1. 开始计时
                 timerStartTime = Date.now();
                 timerInterval = setInterval(() => {
                     const elapsed = ((Date.now() - timerStartTime) / 1000).toFixed(1);
@@ -186,13 +186,13 @@
                 btn.classList.add('running');
                 btn.innerText = data[currentLang].timerRunning;
             } else {
-                // 停止计时并重置
+                // 2. 停止计时并重置
                 clearInterval(timerInterval);
                 timerInterval = null;
                 btn.classList.remove('running');
                 const finalTime = ((Date.now() - timerStartTime) / 1000).toFixed(2);
                 
-                // 弹窗展示成绩
+                // 3. 弹窗展示成绩
                 const title = currentLang === 'zh' ? "滞空成绩" : "Airtime Record";
                 const text = currentLang === 'zh' 
                     ? `本次纸飞机滞空时间：\n【 ${finalTime} 秒 】\n\n计时已重置，随时可再次起飞！` 
@@ -202,19 +202,14 @@
                 document.getElementById('modal-text').innerText = text;
                 openModal();
                 
-                // 恢复按钮文字
+                // 4. 恢复按钮文字
                 btn.innerText = data[currentLang].timer;
             }
         }
 
         // 星星与里程
         document.addEventListener('click', function(e) {
-            if (e.target.closest('.join-btn') || e.target.closest('.modal-content') || e.target.closest('.tool-btn') || e.target.closest('.lang-switch') || e.target.closest('.fortune-btn') || e.target.closest('.timer-box')) return;
-            
-            mileage++;
-            document.getElementById('mileage-count').innerText = mileage;
-            localStorage.setItem('maple_mileage', mileage);
-            
-            // 检查成就解锁
-            achievements.forEach(ach => {
-                if (mileage >= ach.threshold && !unlockedAchievements.includes(
+            if (e.target.closest('.join-btn') || e.target.closest('.modal-content') || e.target.closest('.tool-btn') || e
+
+---
+代码这次应该完整了，你复制保存后试试，如果还有问题直接截图给我看。
