@@ -15,6 +15,7 @@
             font-family: 'Courier New', Courier, monospace; /* 科技感等宽字体 */
             overflow-x: hidden; /* 防止横向滚动 */
             line-height: 1.6;
+            cursor: crosshair; /* 把鼠标变成十字准星 */
         }
 
         /* 2. 动态枫叶飘落效果 */
@@ -70,7 +71,23 @@
             100% { left: 110%; opacity: 0; transform: rotate(10deg); }
         }
 
-        /* 4. 赛博朋克风的文字与排版 */
+        /* 4. 点击粒子爆炸效果 */
+        .particle {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none; /* 让粒子不影响鼠标点击 */
+            z-index: 999;
+            animation: explode 0.8s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        }
+
+        /* 5. 赛博朋克风的文字与排版 */
         header {
             padding: 20px 40px;
             border-bottom: 2px solid #FF00FF;
@@ -103,7 +120,23 @@
             color: #FFFFFF;
             text-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF;
             margin-bottom: 20px;
+            min-height: 60px; /* 防止打字时高度跳动 */
         }
+        /* 打字机闪烁光标 */
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 40px;
+            background-color: #00FFFF;
+            margin-left: 5px;
+            vertical-align: middle;
+            animation: blink 0.7s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
         .hero p {
             font-size: 18px;
             color: #AAAAAA;
@@ -138,6 +171,7 @@
         /* 移动端适配 */
         @media (max-width: 600px) {
             .hero h1 { font-size: 28px; }
+            .cursor { height: 28px; }
             header { padding: 15px 20px; flex-direction: column; gap: 10px; }
             .nav-links a { margin-left: 10px; font-size: 14px; }
         }
@@ -170,7 +204,8 @@
     </header>
 
     <section class="hero">
-        <h1>构建专业的纸飞机爱好者社区</h1>
+        <!-- 注意：这里加了 id="typewriter" 和 span 光标，用于打字机效果 -->
+        <h1 id="typewriter"><span class="cursor"></span></h1>
         <p>致力于打造一个集公平竞技、系统教程与深度社交于一体的平台。<br>让每一次飞行都有据可依，让每一位玩家都能找到组织。</p>
     </section>
 
@@ -188,6 +223,46 @@
     <footer>
         <p>© 2026 枫叶纸飞机 Maple Paper Plane Community</p>
     </footer>
+
+    <!-- 粒子爆炸与打字机 JS 脚本 -->
+    <script>
+        // 1. 点击粒子爆炸效果
+        document.addEventListener('click', function(e) {
+            const colors = ['#FF00FF', '#00FFFF', '#FFFF00', '#00FF00'];
+            for (let i = 0; i < 12; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.boxShadow = `0 0 10px ${particle.style.backgroundColor}`;
+                particle.style.left = e.clientX + 'px';
+                particle.style.top = e.clientY + 'px';
+                const angle = Math.random() * 2 * Math.PI;
+                const distance = 50 + Math.random() * 50;
+                particle.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
+                particle.style.setProperty('--ty', `${Math.sin(angle) * distance}px`);
+                document.body.appendChild(particle);
+                setTimeout(() => { particle.remove(); }, 800);
+            }
+        });
+
+        // 2. 打字机效果
+        const text = "构建专业的纸飞机爱好者社区";
+        let index = 0;
+        const typewriterElement = document.getElementById('typewriter');
+        const cursorElement = typewriterElement.querySelector('.cursor');
+
+        function type() {
+            if (index < text.length) {
+                // 在光标前面插入文字
+                typewriterElement.insertBefore(document.createTextNode(text.charAt(index)), cursorElement);
+                index++;
+                setTimeout(type, 150); // 打字速度（毫秒），数字越小打字越快
+            }
+        }
+        
+        // 页面加载后延迟 0.5 秒开始打字
+        setTimeout(type, 500);
+    </script>
 
 </body>
 </html>
