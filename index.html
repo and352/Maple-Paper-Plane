@@ -26,7 +26,9 @@
             writing-mode:vertical-rl;text-orientation:upright;
             letter-spacing:.3em;line-height:1.8;
             color:var(--txt);font-size:1.2rem;
-            flex-shrink:0;width:45px;white-space:nowrap; 
+            flex-shrink:0;width:45px;
+            /* 核心保底：强制不换行，一根竹片就是一根竹片 */
+            white-space:nowrap; 
         }
         
         /* 英文模式竹简 */
@@ -120,16 +122,18 @@ function renderBamboo(){
     container.innerHTML='';
     
     if(lang==='zh'){
+        // 核心修复：按换行符切割，保留换行符
         const lines = d.c.split('\n');
         lines.forEach(line => {
-            if(line.trim() !== ''){ 
+            if(line.trim() !== ''){ // 过滤空行
                 const slip = document.createElement('div');
                 slip.className = 'slip';
-                slip.innerText = line; 
+                slip.innerText = line; // 每根竹片只放一行字
                 container.appendChild(slip);
             }
         });
     } else {
+        // 英文按段落
         const paragraphs = d.c.split('\n\n');
         paragraphs.forEach(p => {
             const slip = document.createElement('div');
@@ -147,7 +151,7 @@ function toggleLang(){
 }
 renderBamboo();
 
-// 2. 普通计时器（已修复）
+// 2. 普通计时器 + 最高滞空 + 里程
 let mil=parseInt(localStorage.getItem('maple_mil'))||0;
 let best=parseInt(localStorage.getItem('maple_best'))||0;
 let timerInt=null, seconds=0, running=false;
@@ -167,30 +171,14 @@ function updateBestDisplay(){
     document.getElementById('best').innerText=`最高滞空: ${h}:${m}:${s}`;
 }
 function toggleTimer(){
-    if(running){
-        clearInterval(timerInt);
-        document.getElementById('startBtn').innerText="起";
-    } else{
-        timerInt=setInterval(()=>{
-            seconds++;
-            updateDisplay();
-            addMileage(1);
-        },1000);
-        document.getElementById('startBtn').innerText="停";
-    }
+    if(running){clearInterval(timerInt);document.getElementById('startBtn').textContent="起";}
+    else{timerInt=setInterval(()=>{seconds++;updateDisplay();addMileage(1);},1000);document.getElementById('startBtn').textContent="停";}
     running=!running;
 }
 function resetTimer(){
-    clearInterval(timerInt);
-    running=false;
-    if(seconds>best){
-        best=seconds;
-        localStorage.setItem('maple_best',best);
-        updateBestDisplay();
-    }
-    seconds=0;
-    updateDisplay();
-    document.getElementById('startBtn').innerText="起";
+    clearInterval(timerInt);running=false;
+    if(seconds>best){best=seconds;localStorage.setItem('maple_best',best);updateBestDisplay();}
+    seconds=0;updateDisplay();document.getElementById('startBtn').textContent="起";
 }
 function addMileage(n){
     mil+=n;
@@ -210,25 +198,11 @@ function updateMsDisplay(){
     document.getElementById('msTimer').innerText=`${s}.${cs}`;
 }
 function toggleMsTimer(){
-    if(msRunning){
-        clearInterval(msInt);
-        document.getElementById('msStartBtn').innerText="起";
-    } else{
-        msInt=setInterval(()=>{
-            ms++;
-            updateMsDisplay();
-        },10);
-        document.getElementById('msStartBtn').innerText="停";
-    }
+    if(msRunning){clearInterval(msInt);document.getElementById('msStartBtn').textContent="起";}
+    else{msInt=setInterval(()=>{ms++;updateMsDisplay();},10);document.getElementById('msStartBtn').textContent="停";}
     msRunning=!msRunning;
 }
-function resetMsTimer(){
-    clearInterval(msInt);
-    msRunning=false;
-    ms=0;
-    updateMsDisplay();
-    document.getElementById('msStartBtn').innerText="起";
-}
+function resetMsTimer(){clearInterval(msInt);msRunning=false;ms=0;updateMsDisplay();document.getElementById('msStartBtn').textContent="起";}
 
 // 4. 抽签功能
 const poems=["素纸轻折寄长风，枫林深处觅归鸿。","指尖翻飞化神翼，不负韶华不负空。","莫道凡纸无傲骨，借得长风上九霄。","千回百转匠心在，一掷凌云万里遥。","聚散随缘皆过客，唯留纸翼记平生。"];
