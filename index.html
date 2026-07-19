@@ -39,9 +39,8 @@
         .ms-display{font-size:2rem;font-weight:bold;color:var(--txt);font-family:monospace;}
         .ms-label{font-size:0.9rem;opacity:0.7;}
 
-        /* 右下角落款样式 */
+        /* 落款样式 */
         .signature{
-            position:fixed;bottom:20px;right:20px;z-index:100;
             writing-mode:vertical-rl;text-orientation:upright;
             font-family:'KaiTi',serif;font-size:1.1rem;color:var(--acc);
             letter-spacing:0.15em;line-height:1.8;
@@ -50,6 +49,7 @@
             background:rgba(0,0,0,0.05);
             backdrop-filter:blur(3px);
             border-radius:4px;
+            align-self:center;
         }
         body.dark .signature{background:rgba(255,255,255,0.05);}
         body.en .signature{writing-mode:horizontal-tb;border-right:none;border-bottom:3px double var(--acc);letter-spacing:0.05em;}
@@ -64,9 +64,6 @@
     <div class="top"><button class="btn" onclick="document.body.classList.toggle('dark')">🏮 挑灯/熄灯</button></div>
     <div class="mil">✈️ 飞行里程: <span id="mil">0</span> 里</div>
     <div class="lang" onclick="toggleLang()">文/EN</div>
-
-    <!-- 右下角落款 -->
-    <div class="signature" id="sign">江湖刀剑：炬<br>江湖侠客滞吧fffff</div>
 
     <div class="scroll">
         <div class="rod"></div>
@@ -111,6 +108,9 @@
             </div>
 
             <div class="act" onclick="drawFortune()" id="ft">求签</div>
+
+            <!-- 落款放在共襄盛举左侧 -->
+            <div class="signature" id="sign">江湖刀剑：炬<br>&lt;time_location&gt;江湖侠客滞吧fffff</div>
         </div>
         <div class="rod"></div>
     </div>
@@ -120,8 +120,8 @@
 <script>
 // 1. 双语数据
 const D={
-zh:{t:"枫树纸飞机",c:`【愿景】\n筑一方净土，聚四海同好。\n融公平竞技、系统教程与深度社交于一体，\n只为纸飞机爱好者，寻一处归心之所。\n\n【破局】\n叹当今短视频江湖，虽喧嚣繁华，却重浮华而轻沉淀。\n吾辈立志，破除三座大山：\n一曰不公：凡纸与特种纸混战，致使新锐难立；\n二曰孤岛：少战队归属，致使高手孤身奋战；\n三曰碎片：良法散落，缺系统实测之明鉴。\n\n【规划】\n建内外双通之台，令天下飞手皆有所归。\n初阶筑基：立用户图鉴，定分级赛制；\n次阶聚势：建战队勋章，成结构化百科；\n终阶出海：启多语切换，登全球排行榜。\n\n若同此念，诚邀入局，共襄盛举。`,ft:"求签",msLabel:"毫秒级计时",sign:"江湖刀剑：炬<br>江湖侠客滞吧fffff"},
-en:{t:"Maple Paper Plane",c:`[Vision]\nBuilding a sanctuary for enthusiasts worldwide.\nIntegrating fair competition, systematic tutorials, and deep social interaction.\n\n[The Problem]\nShort-video platforms are bustling but prioritize fleeting entertainment over substance. We solve three issues:\n1. Unfairness: Standard and specialty papers compete together.\n2. Isolation: Players lack team systems and belonging.\n3. Fragmentation: Tutorials are scattered without verification.\n\n[Roadmap]\nPhase 1: User database, model gallery, tiered tournaments.\nPhase 2: Clan system, achievement badges, structured Wiki.\nPhase 3: Multi-language support, global leaderboards.\n\nJoin us if you share this vision.`,ft:"Fortune",msLabel:"Millisecond Timer",sign:"Blades of Jianghu: Ju<br>Wanderer's Bar fffff"}
+zh:{t:"枫树纸飞机",c:`【愿景】\n筑一方净土，聚四海同好。\n融公平竞技、系统教程与深度社交于一体，\n只为纸飞机爱好者，寻一处归心之所。\n\n【破局】\n叹当今短视频江湖，虽喧嚣繁华，却重浮华而轻沉淀。\n吾辈立志，破除三座大山：\n一曰不公：凡纸与特种纸混战，致使新锐难立；\n二曰孤岛：少战队归属，致使高手孤身奋战；\n三曰碎片：良法散落，缺系统实测之明鉴。\n\n【规划】\n建内外双通之台，令天下飞手皆有所归。\n初阶筑基：立用户图鉴，定分级赛制；\n次阶聚势：建战队勋章，成结构化百科；\n终阶出海：启多语切换，登全球排行榜。\n\n若同此念，诚邀入局，共襄盛举。`,ft:"求签",msLabel:"毫秒级计时",sign:"江湖刀剑：炬<br>&lt;time_location&gt;江湖侠客滞吧fffff"},
+en:{t:"Maple Paper Plane",c:`[Vision]\nBuilding a sanctuary for enthusiasts worldwide.\nIntegrating fair competition, systematic tutorials, and deep social interaction.\n\n[The Problem]\nShort-video platforms are bustling but prioritize fleeting entertainment over substance. We solve three issues:\n1. Unfairness: Standard and specialty papers compete together.\n2. Isolation: Players lack team systems and belonging.\n3. Fragmentation: Tutorials are scattered without verification.\n\n[Roadmap]\nPhase 1: User database, model gallery, tiered tournaments.\nPhase 2: Clan system, achievement badges, structured Wiki.\nPhase 3: Multi-language support, global leaderboards.\n\nJoin us if you share this vision.`,ft:"Fortune",msLabel:"Millisecond Timer",sign:"Blades of Jianghu: Ju<br>&lt;time_location&gt;Wanderer's Bar fffff"}
 };
 let lang='zh';
 function toggleLang(){
