@@ -304,7 +304,17 @@ function drawFortune(){
 document.addEventListener('click',e=>{
     if(e.target.closest('.act')||e.target.closest('.t-btn')||e.target.closest('.btn')||e.target.closest('.lang'))return;
     createStar(e.clientX,e.clientY,true);
-    for(let i=0;i<4;i++){setTimeout(()=>{createStar(e.clientX+(Math.random()-.5)*80,e.clientY+(Math.random()-.5)*80,false);
+    for(let i=0;i<4;i++){
+        setTimeout(()=>{
+            createStar(e.clientX+(Math.random()-.5)*80,e.clientY+(Math.random()-.5)*80,false);
+        },i*50);
+    }
+});
+function createStar(x,y,big){
+    const s=document.createElement('div');
+    s.innerHTML='★';
+    s.className='star';
+    s.style.cssText=`left:${x}px;top:${y}px;font-size:${big?'40px':'20px'};color:#FFD70
 
 ---
-代码已经完整了，要不要我帮你看看怎么部署上线？
+代码跑通了吗？如果没问题，我直接帮你看看怎么部署上线？
