@@ -39,13 +39,6 @@
         .ms-display{font-size:2rem;font-weight:bold;color:var(--txt);font-family:monospace;}
         .ms-label{font-size:0.9rem;opacity:0.7;}
 
-        /* 飞行日志排版 */
-        .log-box{writing-mode:horizontal-tb;border-left:2px dashed var(--txt);padding-left:20px;margin-left:20px;min-width:200px;align-self:flex-start;}
-        body.en .log-box{border-left:none;border-top:2px dashed var(--txt);padding-left:0;padding-top:20px;margin-left:0;}
-        .log-title{font-size:1.2rem;font-weight:bold;margin-bottom:10px;}
-        .log-item{font-size:0.9rem;margin-bottom:10px;line-height:1.6;opacity:0.9;}
-        .log-empty{font-size:0.9rem;font-style:italic;opacity:0.6;}
-
         .badge{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:radial-gradient(circle,#f4e4bc 30%,#d4af37 100%);padding:40px;border-radius:50%;color:#8b0000;text-align:center;box-shadow:0 0 60px rgba(212,175,55,.8);border:4px solid #8b0000;z-index:2000;transition:.6s cubic-bezier(.175,.885,.32,1.275);}
         .badge.show{transform:translate(-50%,-50%) scale(1);}
         .star{position:fixed;pointer-events:none;z-index:9999;animation:fade 1s forwards;}
@@ -53,8 +46,8 @@
     </style>
 </head>
 <body>
-    <div class="top"><button class="btn" onclick="document.body.classList.toggle('dark')"> 挑灯/熄灯</button></div>
-    <div class="mil"> 飞行里程: <span id="mil">0</span> 里</div>
+    <div class="top"><button class="btn" onclick="document.body.classList.toggle('dark')">🏮 挑灯/熄灯</button></div>
+    <div class="mil">✈️ 飞行里程: <span id="mil">0</span> 里</div>
     <div class="lang" onclick="toggleLang()">文/EN</div>
 
     <div class="scroll">
@@ -99,12 +92,6 @@
                 </div>
             </div>
 
-            <!-- 飞行日志 -->
-            <div class="log-box">
-                <div class="log-title" id="logTitle">📜 本月飞行志</div>
-                <div id="logContent"><div class="log-empty">暂无记录，请起飞...</div></div>
-            </div>
-
             <div class="act" onclick="drawFortune()" id="ft">求签</div>
         </div>
         <div class="rod"></div>
@@ -115,8 +102,8 @@
 <script>
 // 1. 双语数据
 const D={
-zh:{t:"枫树纸飞机",c:`【愿景】\n筑一方净土，聚四海同好。\n融公平竞技、系统教程与深度社交于一体，\n只为纸飞机爱好者，寻一处归心之所。\n\n【破局】\n叹当今短视频江湖，虽喧嚣繁华，却重浮华而轻沉淀。\n吾辈立志，破除三座大山：\n一曰不公：凡纸与特种纸混战，致使新锐难立；\n二曰孤岛：少战队归属，致使高手孤身奋战；\n三曰碎片：良法散落，缺系统实测之明鉴。\n\n【规划】\n建内外双通之台，令天下飞手皆有所归。\n初阶筑基：立用户图鉴，定分级赛制；\n次阶聚势：建战队勋章，成结构化百科；\n终阶出海：启多语切换，登全球排行榜。\n\n若同此念，诚邀入局，共襄盛举。`,ft:"求签",msLabel:"毫秒级计时",logTitle:"📜 本月飞行志",logEmpty:"暂无记录，请起飞..."},
-en:{t:"Maple Paper Plane",c:`[Vision]\nBuilding a sanctuary for enthusiasts worldwide.\nIntegrating fair competition, systematic tutorials, and deep social interaction.\n\n[The Problem]\nShort-video platforms are bustling but prioritize fleeting entertainment over substance. We solve three issues:\n1. Unfairness: Standard and specialty papers compete together.\n2. Isolation: Players lack team systems and belonging.\n3. Fragmentation: Tutorials are scattered without verification.\n\n[Roadmap]\nPhase 1: User database, model gallery, tiered tournaments.\nPhase 2: Clan system, achievement badges, structured Wiki.\nPhase 3: Multi-language support, global leaderboards.\n\nJoin us if you share this vision.`,ft:"Fortune",msLabel:"Millisecond Timer",logTitle:"📜 Monthly Flight Log",logEmpty:"No records yet. Take off!"}
+zh:{t:"枫树纸飞机",c:`【愿景】\n筑一方净土，聚四海同好。\n融公平竞技、系统教程与深度社交于一体，\n只为纸飞机爱好者，寻一处归心之所。\n\n【破局】\n叹当今短视频江湖，虽喧嚣繁华，却重浮华而轻沉淀。\n吾辈立志，破除三座大山：\n一曰不公：凡纸与特种纸混战，致使新锐难立；\n二曰孤岛：少战队归属，致使高手孤身奋战；\n三曰碎片：良法散落，缺系统实测之明鉴。\n\n【规划】\n建内外双通之台，令天下飞手皆有所归。\n初阶筑基：立用户图鉴，定分级赛制；\n次阶聚势：建战队勋章，成结构化百科；\n终阶出海：启多语切换，登全球排行榜。\n\n若同此念，诚邀入局，共襄盛举。`,ft:"求签",msLabel:"毫秒级计时"},
+en:{t:"Maple Paper Plane",c:`[Vision]\nBuilding a sanctuary for enthusiasts worldwide.\nIntegrating fair competition, systematic tutorials, and deep social interaction.\n\n[The Problem]\nShort-video platforms are bustling but prioritize fleeting entertainment over substance. We solve three issues:\n1. Unfairness: Standard and specialty papers compete together.\n2. Isolation: Players lack team systems and belonging.\n3. Fragmentation: Tutorials are scattered without verification.\n\n[Roadmap]\nPhase 1: User database, model gallery, tiered tournaments.\nPhase 2: Clan system, achievement badges, structured Wiki.\nPhase 3: Multi-language support, global leaderboards.\n\nJoin us if you share this vision.`,ft:"Fortune",msLabel:"Millisecond Timer"}
 };
 let lang='zh';
 function toggleLang(){
@@ -127,8 +114,6 @@ function toggleLang(){
     document.getElementById('c').innerText=d.c;
     document.getElementById('ft').innerText=d.ft;
     document.getElementById('msLabel').innerText=d.msLabel;
-    document.getElementById('logTitle').innerText=d.logTitle;
-    renderLog(); // 切换语言时重新渲染日志
 }
 
 // 2. 普通计时器 + 最高滞空 + 里程
@@ -157,8 +142,6 @@ function toggleTimer(){
 }
 function resetTimer(){
     clearInterval(timerInt);running=false;
-    // 记录本次成绩到日志
-    if(seconds > 0) recordFlight(seconds);
     if(seconds>best){best=seconds;localStorage.setItem('maple_best',best);updateBestDisplay();}
     seconds=0;updateDisplay();document.getElementById('startBtn').innerText="起";
 }
@@ -166,6 +149,7 @@ function addMileage(n){
     mil+=n;
     document.getElementById('mil').innerText=mil;
     localStorage.setItem('maple_mil',mil);
+    // 【修复】：只有恰好达到100时才触发一次成就
     if(mil === 100){
         document.getElementById('badge').classList.add('show');
         setTimeout(()=>document.getElementById('badge').classList.remove('show'),3000);
@@ -186,52 +170,7 @@ function toggleMsTimer(){
 }
 function resetMsTimer(){clearInterval(msInt);msRunning=false;ms=0;updateMsDisplay();document.getElementById('msStartBtn').innerText="起";}
 
-// 4. 飞行日志系统
-function getTodayKey(){return new Date().toISOString().slice(0,10);}
-function getMonthKey(){return new Date().toISOString().slice(0,7);}
-function formatTime(sec){
-    const h=String(Math.floor(sec/3600)).padStart(2,'0');
-    const m=String(Math.floor((sec%3600)/60)).padStart(2,'0');
-    const s=String(sec%60).padStart(2,'0');
-    return `${h}:${m}:${s}`;
-}
-function recordFlight(sec){
-    let logs=JSON.parse(localStorage.getItem('maple_logs')||'{}');
-    const today=getTodayKey();
-    if(!logs[today]) logs[today]={best:0,count:0,flights:[]};
-    logs[today].flights.push(sec);
-    logs[today].count++;
-    if(sec>logs[today].best) logs[today].best=sec;
-    localStorage.setItem('maple_logs',JSON.stringify(logs));
-    renderLog();
-}
-function renderLog(){
-    const logs=JSON.parse(localStorage.getItem('maple_logs')||'{}');
-    const month=getMonthKey();
-    const container=document.getElementById('logContent');
-    const emptyText=D[lang].logEmpty;
-    
-    // 筛选当月数据
-    const monthLogs=Object.entries(logs).filter(([k])=>k.startsWith(month)).sort((a,b)=>b[0].localeCompare(a[0]));
-    
-    if(monthLogs.length===0){
-        container.innerHTML=`<div class="log-empty">${emptyText}</div>`;
-        return;
-    }
-    
-    let html='';
-    monthLogs.forEach(([date,data])=>{
-        const day=date.slice(5); // MM-DD
-        html+=`<div class="log-item">
-            <strong>${day}</strong> | ${lang=='zh'?'最高':'Best'}: ${formatTime(data.best)}<br>
-            ${lang=='zh'?'起飞':'Flights'}: ${data.count}${lang=='zh'?'次':'x'}<br>
-            ${lang=='zh'?'记录':'Rec'}: ${data.flights.map(f=>formatTime(f)).join(', ')}
-        </div>`;
-    });
-    container.innerHTML=html;
-}
-
-// 5. 抽签功能
+// 4. 抽签功能
 const poems=["素纸轻折寄长风，枫林深处觅归鸿。","指尖翻飞化神翼，不负韶华不负空。","莫道凡纸无傲骨，借得长风上九霄。","千回百转匠心在，一掷凌云万里遥。","聚散随缘皆过客，唯留纸翼记平生。"];
 function drawFortune(){
     let msg;
@@ -239,12 +178,21 @@ function drawFortune(){
         const p=poems[Math.floor(Math.random()*poems.length)];
         msg=lang=='zh'?`【上上签】\n${p}\n\n此乃吉兆，愿君乘风破浪！`:`[Great Blessing]\n${p}\n\nAn auspicious sign! Ride the wind!`;
     }else{msg=lang=='zh'?"【平签】\n风平浪静，宜静候佳音。":"[Ordinary Sign]\nCalm winds. Wait for good news.";}
-    const ftBtn=document.getElementById('ft');
-    ftBtn.innerText=msg;ftBtn.style.borderColor='var(--txt)';ftBtn.style.color='var(--txt)';ftBtn.onclick=null;
-    setTimeout(()=>{ftBtn.innerText=D[lang].ft;ftBtn.style.borderColor='';ftBtn.style.color='';ftBtn.onclick=drawFortune;},3000);
+    
+    const ftBtn = document.getElementById('ft');
+    ftBtn.innerText = msg;
+    ftBtn.style.borderColor = 'var(--txt)';
+    ftBtn.style.color = 'var(--txt)';
+    ftBtn.onclick = null;
+    setTimeout(()=>{
+        ftBtn.innerText = D[lang].ft;
+        ftBtn.style.borderColor = '';
+        ftBtn.style.color = '';
+        ftBtn.onclick = drawFortune;
+    }, 3000);
 }
 
-// 6. 星星特效
+// 5. 星星特效
 document.addEventListener('click',e=>{
     if(e.target.closest('.act')||e.target.closest('.t-btn')||e.target.closest('.btn')||e.target.closest('.lang'))return;
     createStar(e.clientX,e.clientY,true);
@@ -252,7 +200,9 @@ document.addEventListener('click',e=>{
 });
 function createStar(x,y,big){
     const s=document.createElement('div');s.innerHTML='★';s.className='star';
-    s.style.cssText=`left:${x}px;top:${y}px;font-size:${big?'40px':'2
-
-
-[(video_note_list_1)]
+    s.style.cssText=`left:${x}px;top:${y}px;font-size:${big?'40px':'20px'};color:#FFD700;transform:translate(-50%,-50%);`;
+    document.body.appendChild(s);setTimeout(()=>s.remove(),1000);
+}
+</script>
+</body>
+</html>
