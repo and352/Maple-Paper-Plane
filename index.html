@@ -10,27 +10,26 @@
         *{margin:0;padding:0;box-sizing:border-box;transition:all .5s;}
         body{background:var(--bg);min-height:100vh;overflow-x:auto;font-family:'KaiTi',serif;cursor:crosshair;}
         
-        /* 卷轴与竹简容器 */
         .scroll{display:flex;min-height:100vh;padding:60px 20px 40px;align-items:stretch;}
         .rod{width:30px;background:linear-gradient(90deg,#2a1610,#5d3a28,#8b5a3c,#5d3a28,#2a1610);box-shadow:inset 0 0 10px rgba(0,0,0,.8);flex-shrink:0;}
         
-        /* 竹简主体 */
+        /* 竹简容器 */
         .bamboo-scroll{
-            flex:1;display:flex;gap:4px;padding:20px;overflow-x:auto;align-items:stretch;
+            flex:1;display:flex;gap:6px;padding:20px;overflow-x:auto;align-items:stretch;
             background:rgba(0,0,0,0.3);border-top:10px solid #3a2010;border-bottom:10px solid #3a2010;
         }
         
-        /* 单根竹片 */
+        /* 单根竹简 */
         .slip{
             background:linear-gradient(90deg,var(--bamboo-dark),var(--bamboo) 10%,var(--bamboo) 90%,var(--bamboo-dark));
-            padding:20px 12px;border-radius:4px;box-shadow:inset 0 0 5px rgba(0,0,0,0.3),2px 0 5px rgba(0,0,0,0.5);
-            writing-mode:vertical-rl;text-orientation:upright;letter-spacing:.2em;line-height:1.8;
-            color:var(--txt);font-size:1.2rem;white-space:pre-wrap;flex-shrink:0;min-width:45px;max-width:60px;
+            padding:20px 10px;border-radius:4px;box-shadow:inset 0 0 5px rgba(0,0,0,0.3),2px 0 5px rgba(0,0,0,0.5);
+            writing-mode:vertical-rl;text-orientation:upright;letter-spacing:.3em;line-height:1.8;
+            color:var(--txt);font-size:1.2rem;flex-shrink:0;width:45px;overflow:hidden;word-break:break-all;
         }
         
-        /* 英文横排竹片 */
+        /* 英文模式竹简 */
         body.en .bamboo-scroll{flex-direction:row;overflow-x:auto;overflow-y:hidden;align-items:flex-start;}
-        body.en .slip{writing-mode:horizontal-tb;text-orientation:mixed;min-width:150px;max-width:200px;max-height:80vh;overflow-y:auto;}
+        body.en .slip{writing-mode:horizontal-tb;text-orientation:mixed;width:auto;min-width:180px;max-width:220px;max-height:80vh;overflow-y:auto;letter-spacing:0;line-height:1.6;}
 
         /* 工具栏 */
         .top{position:fixed;top:20px;left:20px;z-index:100;}
@@ -38,19 +37,19 @@
         .lang{position:fixed;top:20px;right:20px;z-index:100;width:40px;height:40px;border-radius:50%;background:var(--acc);color:#fff;border:2px solid #fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:bold;font-size:12px;}
         .mil{position:fixed;bottom:20px;left:20px;z-index:100;background:rgba(0,0,0,.6);color:#d4af37;padding:8px 15px;border-radius:20px;border:1px solid #d4af37;font-weight:bold;font-size:14px;}
 
-        /* 竹简内的特殊模块（计时器、按钮） */
-        .module{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:15px 10px;flex-shrink:0;min-width:80px;}
-        .act{border:3px double var(--acc);color:var(--acc);padding:15px 10px;font-size:1.2rem;font-weight:bold;cursor:pointer;background:transparent;transition:.3s;white-space:nowrap;}
+        /* 功能模块竹简 */
+        .module{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:15px 10px;flex-shrink:0;width:80px;background:linear-gradient(90deg,var(--bamboo-dark),var(--bamboo) 10%,var(--bamboo) 90%,var(--bamboo-dark));border-radius:4px;box-shadow:inset 0 0 5px rgba(0,0,0,0.3),2px 0 5px rgba(0,0,0,0.5);}
+        .act{border:3px double var(--acc);color:var(--acc);padding:15px 10px;font-size:1.2rem;font-weight:bold;cursor:pointer;background:transparent;transition:.3s;white-space:nowrap;writing-mode:horizontal-tb;}
         .act:hover{background:var(--acc);color:#fff;}
         
-        .timer-display{font-size:2rem;font-weight:bold;color:var(--acc);font-family:monospace;writing-mode:horizontal-tb;}
-        .best-record{font-size:0.9rem;color:var(--txt);opacity:0.8;writing-mode:horizontal-tb;text-align:center;}
-        .timer-btns{display:flex;gap:10px;writing-mode:horizontal-tb;}
-        .t-btn{padding:8px 15px;border:2px solid var(--acc);color:var(--acc);background:transparent;cursor:pointer;font-weight:bold;font-size:1rem;transition:.3s;}
+        .timer-display{font-size:1.8rem;font-weight:bold;color:var(--acc);font-family:monospace;writing-mode:horizontal-tb;}
+        .best-record{font-size:0.8rem;color:var(--txt);opacity:0.8;writing-mode:horizontal-tb;text-align:center;}
+        .timer-btns{display:flex;gap:8px;writing-mode:horizontal-tb;}
+        .t-btn{padding:6px 12px;border:2px solid var(--acc);color:var(--acc);background:transparent;cursor:pointer;font-weight:bold;font-size:0.9rem;transition:.3s;}
         .t-btn:hover{background:var(--acc);color:#fff;}
 
-        .ms-display{font-size:1.8rem;font-weight:bold;color:var(--txt);font-family:monospace;writing-mode:horizontal-tb;}
-        .ms-label{font-size:0.9rem;opacity:0.7;writing-mode:horizontal-tb;}
+        .ms-display{font-size:1.6rem;font-weight:bold;color:var(--txt);font-family:monospace;writing-mode:horizontal-tb;}
+        .ms-label{font-size:0.8rem;opacity:0.7;writing-mode:horizontal-tb;}
 
         .badge{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:radial-gradient(circle,#f4e4bc 30%,#d4af37 100%);padding:40px;border-radius:50%;color:#8b0000;text-align:center;box-shadow:0 0 60px rgba(212,175,55,.8);border:4px solid #8b0000;z-index:2000;transition:.6s cubic-bezier(.175,.885,.32,1.275);}
         .badge.show{transform:translate(-50%,-50%) scale(1);}
@@ -66,13 +65,13 @@
     <div class="scroll">
         <div class="rod"></div>
         <div class="bamboo-scroll" id="bamboo">
-            <!-- 标题 -->
-            <div class="slip" id="t" style="font-size:2rem;font-weight:bold;color:var(--acc);">枫树纸飞机</div>
+            <!-- 标题竹简 -->
+            <div class="slip" id="t" style="font-size:2rem;font-weight:bold;color:var(--acc);width:60px;">枫树纸飞机</div>
             
-            <!-- 正文（JS会自动拆分到竹片上） -->
+            <!-- 正文竹简容器 -->
             <div id="content-slips" style="display:contents;"></div>
 
-            <!-- 普通计时器 + 最高滞空 -->
+            <!-- 普通计时器 -->
             <div class="module">
                 <div class="timer-display" id="timer">00:00:00</div>
                 <div class="best-record" id="best">最高滞空: 00:00:00</div>
@@ -82,7 +81,7 @@
                 </div>
             </div>
 
-            <!-- 毫秒级计时器 -->
+            <!-- 毫秒计时器 -->
             <div class="module">
                 <div class="ms-label" id="msLabel">毫秒级计时</div>
                 <div class="ms-display" id="msTimer">00.00</div>
@@ -92,7 +91,7 @@
                 </div>
             </div>
 
-            <!-- 抽签按钮 -->
+            <!-- 抽签 -->
             <div class="module"><div class="act" onclick="drawFortune()" id="ft">求签</div></div>
         </div>
         <div class="rod"></div>
@@ -101,14 +100,14 @@
     <div class="badge" id="badge"><div style="font-size:50px;filter:drop-shadow(0 0 5px gold);">✈️</div><div style="font-weight:bold;font-size:24px;margin-top:10px;">凌云之志</div><div style="font-size:14px;margin-top:5px;">飞行里程破百</div></div>
 
 <script>
-// 1. 双语数据
+// 1. 双语数据（英文大白话版）
 const D={
 zh:{t:"枫树纸飞机",c:`【愿景】\n筑一方净土，聚四海同好。\n融公平竞技、系统教程与深度社交于一体，\n只为纸飞机爱好者，寻一处归心之所。\n\n【破局】\n叹当今短视频江湖，虽喧嚣繁华，却重浮华而轻沉淀。\n吾辈立志，破除三座大山：\n一曰不公：凡纸与特种纸混战，致使新锐难立；\n二曰孤岛：少战队归属，致使高手孤身奋战；\n三曰碎片：良法散落，缺系统实测之明鉴。\n\n【规划】\n建内外双通之台，令天下飞手皆有所归。\n初阶筑基：立用户图鉴，定分级赛制；\n次阶聚势：建战队勋章，成结构化百科；\n终阶出海：启多语切换，登全球排行榜。\n\n若同此念，诚邀入局，共襄盛举。`,ft:"求签",msLabel:"毫秒级计时"},
-en:{t:"Maple Paper Plane",c:`[Vision]\nBuilding a sanctuary for enthusiasts worldwide.\nIntegrating fair competition, systematic tutorials, and deep social interaction.\n\n[The Problem]\nShort-video platforms are bustling but prioritize fleeting entertainment over substance. We solve three issues:\n1. Unfairness: Standard and specialty papers compete together.\n2. Isolation: Players lack team systems and belonging.\n3. Fragmentation: Tutorials are scattered without verification.\n\n[Roadmap]\nPhase 1: User database, model gallery, tiered tournaments.\nPhase 2: Clan system, achievement badges, structured Wiki.\nPhase 3: Multi-language support, global leaderboards.\n\nJoin us if you share this vision.`,ft:"Fortune",msLabel:"Millisecond Timer"}
+en:{t:"Maple Paper Plane",c:`[Our Goal]\nWe want to build a fun and fair community for paper plane fans.\nWe will offer fair games, step-by-step tutorials, and a great place to make friends.\n\n[The Problem]\nRight now, short-video apps are too noisy and lack real depth. We want to fix three things:\n1. Unfair Games: Regular paper and special paper shouldn't compete together.\n2. Playing Alone: Players need teams so they don't feel lonely.\n3. Messy Info: Good tips are scattered everywhere. We need a real guide.\n\n[Our Plan]\nWe are building a platform for all pilots:\nStep 1: User profiles and fair tournaments.\nStep 2: Team badges and a clear Wiki.\nStep 3: Multi-language support and global rankings.\n\nIf you like this idea, join us and let's build it together!`,ft:"Fortune",msLabel:"MS Timer"}
 };
 let lang='zh';
 
-// 将文本渲染为竹简
+// 将文本按字数切割并渲染为竹简
 function renderBamboo(){
     const d=D[lang];
     document.getElementById('t').innerText=d.t;
@@ -117,14 +116,25 @@ function renderBamboo(){
     
     const container=document.getElementById('content-slips');
     container.innerHTML='';
-    // 简单按字符或段落拆分竹简，这里按段落拆分更合理
-    const paragraphs = d.c.split('\n\n');
-    paragraphs.forEach(p => {
-        const slip = document.createElement('div');
-        slip.className = 'slip';
-        slip.innerText = p;
-        container.appendChild(slip);
-    });
+    
+    // 中文每15个字一根竹简，英文按段落
+    if(lang==='zh'){
+        const cleanText = d.c.replace(/\n/g,''); // 去掉换行符
+        for(let i=0; i<cleanText.length; i+=15){
+            const slip = document.createElement('div');
+            slip.className = 'slip';
+            slip.innerText = cleanText.substring(i, i+15);
+            container.appendChild(slip);
+        }
+    } else {
+        const paragraphs = d.c.split('\n\n');
+        paragraphs.forEach(p => {
+            const slip = document.createElement('div');
+            slip.className = 'slip';
+            slip.innerText = p;
+            container.appendChild(slip);
+        });
+    }
 }
 
 function toggleLang(){
@@ -132,7 +142,7 @@ function toggleLang(){
     document.body.classList.toggle('en');
     renderBamboo();
 }
-renderBamboo(); // 初始化
+renderBamboo();
 
 // 2. 普通计时器 + 最高滞空 + 里程
 let mil=parseInt(localStorage.getItem('maple_mil'))||0;
