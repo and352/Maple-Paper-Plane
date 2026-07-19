@@ -19,20 +19,19 @@
             background:rgba(0,0,0,0.3);border-top:10px solid #3a2010;border-bottom:10px solid #3a2010;
         }
         
-        /* 单根竹简 - 终极保底样式 */
+        /* 单根竹简 - 极简保底样式 */
         .slip{
             background:linear-gradient(90deg,var(--bamboo-dark),var(--bamboo) 10%,var(--bamboo) 90%,var(--bamboo-dark));
             padding:20px 10px;border-radius:4px;box-shadow:inset 0 0 5px rgba(0,0,0,0.3),2px 0 5px rgba(0,0,0,0.5);
             writing-mode:vertical-rl;text-orientation:upright;
             letter-spacing:.3em;line-height:1.8;
             color:var(--txt);font-size:1.2rem;
-            flex-shrink:0;width:45px;height:70vh;
-            display:flex;flex-direction:column;justify-content:center;align-items:center;
+            flex-shrink:0;width:45px;white-space:nowrap; 
         }
         
         /* 英文模式竹简 */
         body.en .bamboo-scroll{flex-direction:row;overflow-x:auto;overflow-y:hidden;align-items:flex-start;}
-        body.en .slip{writing-mode:horizontal-tb;text-orientation:mixed;width:auto;min-width:180px;max-width:220px;height:auto;max-height:70vh;overflow-y:auto;letter-spacing:0;line-height:1.6;justify-content:flex-start;align-items:flex-start;}
+        body.en .slip{writing-mode:horizontal-tb;text-orientation:mixed;width:auto;min-width:180px;max-width:220px;max-height:80vh;overflow-y:auto;letter-spacing:0;line-height:1.6;white-space:normal;}
 
         /* 工具栏 */
         .top{position:fixed;top:20px;left:20px;z-index:100;}
@@ -41,7 +40,7 @@
         .mil{position:fixed;bottom:20px;left:20px;z-index:100;background:rgba(0,0,0,.6);color:#d4af37;padding:8px 15px;border-radius:20px;border:1px solid #d4af37;font-weight:bold;font-size:14px;}
 
         /* 功能模块竹简 */
-        .module{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:15px 10px;flex-shrink:0;width:80px;height:70vh;background:linear-gradient(90deg,var(--bamboo-dark),var(--bamboo) 10%,var(--bamboo) 90%,var(--bamboo-dark));border-radius:4px;box-shadow:inset 0 0 5px rgba(0,0,0,0.3),2px 0 5px rgba(0,0,0,0.5);}
+        .module{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:15px 10px;flex-shrink:0;width:80px;background:linear-gradient(90deg,var(--bamboo-dark),var(--bamboo) 10%,var(--bamboo) 90%,var(--bamboo-dark));border-radius:4px;box-shadow:inset 0 0 5px rgba(0,0,0,0.3),2px 0 5px rgba(0,0,0,0.5);}
         .act{border:3px double var(--acc);color:var(--acc);padding:15px 10px;font-size:1.2rem;font-weight:bold;cursor:pointer;background:transparent;transition:.3s;white-space:nowrap;writing-mode:horizontal-tb;}
         .act:hover{background:var(--acc);color:#fff;}
         
@@ -110,7 +109,7 @@ en:{t:"Maple Paper Plane",c:`[Our Goal]\nWe want to build a fun and fair communi
 };
 let lang='zh';
 
-// 将文本按单字切割并渲染为竹简
+// 将文本按行切割并渲染为竹简
 function renderBamboo(){
     const d=D[lang];
     document.getElementById('t').innerText=d.t;
@@ -121,23 +120,16 @@ function renderBamboo(){
     container.innerHTML='';
     
     if(lang==='zh'){
-        // 核心修复：按换行符切割，再按单字切割
         const lines = d.c.split('\n');
         lines.forEach(line => {
-            if(line.trim() !== ''){
+            if(line.trim() !== ''){ 
                 const slip = document.createElement('div');
                 slip.className = 'slip';
-                // 把每个字拆成单独的 span
-                for(let char of line){
-                    const span = document.createElement('span');
-                    span.innerText = char;
-                    slip.appendChild(span);
-                }
+                slip.innerText = line; 
                 container.appendChild(slip);
             }
         });
     } else {
-        // 英文按段落
         const paragraphs = d.c.split('\n\n');
         paragraphs.forEach(p => {
             const slip = document.createElement('div');
@@ -155,7 +147,7 @@ function toggleLang(){
 }
 renderBamboo();
 
-// 2. 普通计时器 + 最高滞空 + 里程
+// 2. 普通计时器（已修复）
 let mil=parseInt(localStorage.getItem('maple_mil'))||0;
 let best=parseInt(localStorage.getItem('maple_best'))||0;
 let timerInt=null, seconds=0, running=false;
@@ -175,14 +167,30 @@ function updateBestDisplay(){
     document.getElementById('best').innerText=`最高滞空: ${h}:${m}:${s}`;
 }
 function toggleTimer(){
-    if(running){clearInterval(timerInt);document.getElementById('startBtn').innerText="起";}
-    else{timerInt=setInterval(()=>{seconds++;updateDisplay();addMileage(1);},1000);document.getElementById('startBtn').innerText="停";}
+    if(running){
+        clearInterval(timerInt);
+        document.getElementById('startBtn').innerText="起";
+    } else{
+        timerInt=setInterval(()=>{
+            seconds++;
+            updateDisplay();
+            addMileage(1);
+        },1000);
+        document.getElementById('startBtn').innerText="停";
+    }
     running=!running;
 }
 function resetTimer(){
-    clearInterval(timerInt);running=false;
-    if(seconds>best){best=seconds;localStorage.setItem('maple_best',best);updateBestDisplay();}
-    seconds=0;updateDisplay();document.getElementById('startBtn').innerText="起";
+    clearInterval(timerInt);
+    running=false;
+    if(seconds>best){
+        best=seconds;
+        localStorage.setItem('maple_best',best);
+        updateBestDisplay();
+    }
+    seconds=0;
+    updateDisplay();
+    document.getElementById('startBtn').innerText="起";
 }
 function addMileage(n){
     mil+=n;
@@ -202,11 +210,25 @@ function updateMsDisplay(){
     document.getElementById('msTimer').innerText=`${s}.${cs}`;
 }
 function toggleMsTimer(){
-    if(msRunning){clearInterval(msInt);document.getElementById('msStartBtn').innerText="起";}
-    else{msInt=setInterval(()=>{ms++;updateMsDisplay();},10);document.getElementById('msStartBtn').innerText="停";}
+    if(msRunning){
+        clearInterval(msInt);
+        document.getElementById('msStartBtn').innerText="起";
+    } else{
+        msInt=setInterval(()=>{
+            ms++;
+            updateMsDisplay();
+        },10);
+        document.getElementById('msStartBtn').innerText="停";
+    }
     msRunning=!msRunning;
 }
-function resetMsTimer(){clearInterval(msInt);msRunning=false;ms=0;updateMsDisplay();document.getElementById('msStartBtn').innerText="起";}
+function resetMsTimer(){
+    clearInterval(msInt);
+    msRunning=false;
+    ms=0;
+    updateMsDisplay();
+    document.getElementById('msStartBtn').innerText="起";
+}
 
 // 4. 抽签功能
 const poems=["素纸轻折寄长风，枫林深处觅归鸿。","指尖翻飞化神翼，不负韶华不负空。","莫道凡纸无傲骨，借得长风上九霄。","千回百转匠心在，一掷凌云万里遥。","聚散随缘皆过客，唯留纸翼记平生。"];
